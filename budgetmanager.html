@@ -1,0 +1,4914 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PulMaster - Ağıllı Maliyyə Təhsili</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #4895ef;
+            --primary-dark: #3a0ca3;
+            --secondary: #f72585;
+            --secondary-light: #b5179e;
+            --success: #4cc9f0;
+            --success-dark: #3a86ff;
+            --warning: #f8961e;
+            --danger: #e63946;
+            --health: #2a9d8f;
+            --work: #7209b7;
+            --social: #f77f00;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --gradient-primary: linear-gradient(135deg, var(--primary), var(--primary-light));
+            --gradient-secondary: linear-gradient(135deg, var(--secondary), var(--secondary-light));
+            --gradient-success: linear-gradient(135deg, var(--success), var(--success-dark));
+            --gradient-health: linear-gradient(135deg, var(--health), #34c9a7);
+            --gradient-work: linear-gradient(135deg, var(--work), #9d4edd);
+            --gradient-social: linear-gradient(135deg, var(--social), #fcbf49);
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --radius: 12px;
+            --transition: all 0.3s ease;
+            
+            /* Tema dəyişənləri */
+            --bg-color: #f5f7ff;
+            --text-color: #212529;
+            --card-bg: white;
+            --header-bg: var(--gradient-primary);
+            --footer-bg: var(--dark);
+        }
+
+        /* Dark tema üçün dəyişənlər */
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --card-bg: #1e1e1e;
+            --header-bg: linear-gradient(135deg, #2a2a72, #009ffd);
+            --footer-bg: #0a0a0a;
+            --gray-light: #2d2d2d;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: var(--transition);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: var(--header-bg);
+            color: white;
+            padding: 1.2rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo i {
+            font-size: 2rem;
+        }
+        
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-left: 15px;
+        }
+        
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            align-items: center;
+        }
+        
+        nav ul li {
+            margin-left: 1.8rem;
+            position: relative;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 5px 0;
+        }
+        
+        nav ul li a:hover {
+            opacity: 0.9;
+        }
+        
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: white;
+            transition: var(--transition);
+        }
+        
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 4rem 0;
+            text-align: center;
+            background-color: var(--card-bg);
+            margin-bottom: 2rem;
+            border-radius: 0 0 var(--radius) var(--radius);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gradient-primary);
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1.2rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+            color: var(--gray);
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--gradient-primary);
+            color: white;
+            padding: 0.9rem 1.8rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+        }
+        
+        .btn-secondary {
+            background: var(--gradient-secondary);
+            box-shadow: 0 4px 15px rgba(247, 37, 133, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            box-shadow: 0 6px 20px rgba(247, 37, 133, 0.4);
+        }
+        
+        .btn-success {
+            background: var(--gradient-success);
+            box-shadow: 0 4px 15px rgba(76, 201, 240, 0.3);
+        }
+        
+        .btn-success:hover {
+            box-shadow: 0 6px 20px rgba(76, 201, 240, 0.4);
+        }
+        
+        .btn-warning {
+            background: var(--warning);
+            box-shadow: 0 4px 15px rgba(248, 150, 30, 0.3);
+        }
+        
+        .btn-warning:hover {
+            box-shadow: 0 6px 20px rgba(248, 150, 30, 0.4);
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            box-shadow: 0 4px 15px rgba(230, 57, 70, 0.3);
+        }
+        
+        .btn-danger:hover {
+            box-shadow: 0 6px 20px rgba(230, 57, 70, 0.4);
+        }
+        
+        .btn-disabled {
+            background: var(--gray);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        
+        .btn-disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }
+        
+        /* Section Styles */
+        .section {
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        
+        .section-title h2 {
+            font-size: 2.2rem;
+            color: var(--primary-dark);
+            font-weight: 700;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+        }
+        
+        /* Card Styles */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+        }
+        
+        .card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-5px);
+        }
+        
+        /* Goal Form */
+        .goal-form {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            margin-bottom: 1.8rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.7rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: var(--transition);
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            maxlength: 21;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+        
+        /* Savings Tips */
+        .savings-tips {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+        
+        .tip-card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tip-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--gradient-primary);
+        }
+        
+        .tip-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .tip-card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        
+        /* Progress Section */
+        .progress-container {
+            margin: 2.5rem 0;
+        }
+        
+        .progress-bar {
+            height: 24px;
+            background-color: var(--gray-light);
+            border-radius: 50px;
+            overflow: hidden;
+            margin-bottom: 0.8rem;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .progress {
+            height: 100%;
+            background: var(--gradient-success);
+            border-radius: 50px;
+            transition: width 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background-image: linear-gradient(
+                -45deg,
+                rgba(255, 255, 255, 0.2) 25%,
+                transparent 25%,
+                transparent 50%,
+                rgba(255, 255, 255, 0.2) 50%,
+                rgba(255, 255, 255, 0.2) 75%,
+                transparent 75%,
+                transparent
+            );
+            background-size: 50px 50px;
+            animation: move 2s linear infinite;
+            border-radius: 50px;
+        }
+        
+        @keyframes move {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 50px 50px;
+            }
+        }
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        
+        .daily-savings {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .savings-input {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .savings-input input {
+            flex: 1;
+        }
+        
+        /* Dashboard */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .stat-card h3 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+        }
+        
+        /* Simulation Section */
+        .simulation-section {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            margin-top: 2rem;
+        }
+        
+        .simulation-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .simulation-stat {
+            background: var(--gradient-primary);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+            color: white;
+            transition: var(--transition);
+        }
+        
+        .simulation-stat:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .simulation-stat h4 {
+            margin-bottom: 0.7rem;
+            font-size: 0.9rem;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+        
+        .simulation-stat p {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        /* Systems Status */
+        .systems-status {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .system-card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border-left: 5px solid var(--primary);
+        }
+        
+        .system-card.health {
+            border-left-color: var(--health);
+        }
+        
+        .system-card.family {
+            border-left-color: var(--secondary);
+        }
+        
+        .system-card.work {
+            border-left-color: var(--work);
+        }
+        
+        .system-card.social {
+            border-left-color: var(--social);
+        }
+        
+        .system-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .system-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+        
+        .system-header i {
+            font-size: 1.5rem;
+        }
+        
+        .system-header.health i {
+            color: var(--health);
+        }
+        
+        .system-header.family i {
+            color: var(--secondary);
+        }
+        
+        .system-header.work i {
+            color: var(--work);
+        }
+        
+        .system-header.social i {
+            color: var(--social);
+        }
+        
+        .system-bar {
+            width: 100%;
+            height: 20px;
+            background-color: var(--gray-light);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+        
+        .system-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+        
+        .system-fill.health {
+            background: var(--gradient-health);
+        }
+        
+        .system-fill.family {
+            background: var(--gradient-secondary);
+        }
+        
+        .system-fill.work {
+            background: var(--gradient-work);
+        }
+        
+        .system-fill.social {
+            background: var(--gradient-social);
+        }
+        
+        .system-value {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        /* Daily Challenge */
+        .daily-challenge {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 1.5rem;
+            border-left: 5px solid var(--primary);
+            transition: var(--transition);
+        }
+        
+        .daily-challenge:hover {
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .challenge-title {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .challenge-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.2rem;
+            margin-top: 1.5rem;
+        }
+        
+        .challenge-option {
+            padding: 1.5rem;
+            border: 2px solid var(--gray-light);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            background: var(--card-bg);
+        }
+        
+        .challenge-option:hover {
+            border-color: var(--primary-light);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .challenge-option.selected {
+            background: rgba(67, 97, 238, 0.05);
+            border-color: var(--primary);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.1);
+        }
+        
+        .day-counter {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .day-indicator {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--gray-light);
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+        
+        .day-indicator.current {
+            background: var(--gradient-primary);
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 4px 10px rgba(67, 97, 238, 0.3);
+        }
+        
+        .day-indicator.completed {
+            background: var(--gradient-success);
+            color: white;
+        }
+        
+        .month-summary {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-top: 2rem;
+            border-left: 5px solid var(--success);
+        }
+        
+        .game-over {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-top: 2rem;
+            border-left: 5px solid var(--danger);
+            text-align: center;
+        }
+        
+        .goal-completed {
+            background-color: #e8f6ef;
+            border-left: 4px solid var(--success);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .goal-completed i {
+            color: var(--success);
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+        
+        /* Expense Tracker */
+        .expense-tracker {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-top: 2rem;
+        }
+        
+        .expense-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .expense-list {
+            margin-bottom: 2rem;
+        }
+        
+        .expense-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        
+        .expense-item:last-child {
+            border-bottom: none;
+        }
+        
+        .expense-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .expense-category {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 0.2rem;
+        }
+        
+        .expense-amount {
+            font-weight: 600;
+            color: var(--danger);
+        }
+        
+        .expense-date {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        .chart-container {
+            height: 300px;
+            margin-top: 2rem;
+        }
+        
+        /* AI Recommendations */
+        .ai-recommendations {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-top: 2rem;
+            border-left: 5px solid var(--success);
+        }
+        
+        .recommendation-item {
+            background-color: rgba(76, 201, 240, 0.1);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--success);
+        }
+        
+        .savings-potential {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--gray-light);
+        }
+        
+        .potential-amount {
+            font-weight: 700;
+            color: var(--success);
+        }
+        
+        /* Notification */
+        .notification {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: var(--gradient-success);
+            color: white;
+            padding: 1.2rem 1.8rem;
+            border-radius: var(--radius);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            transform: translateX(150%);
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            max-width: 350px;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification i {
+            font-size: 1.5rem;
+        }
+        
+        /* Financial Education Section */
+        .education-section {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-top: 2rem;
+        }
+        
+        .education-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .education-stat {
+            background: var(--gradient-primary);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+            color: white;
+            transition: var(--transition);
+        }
+        
+        .education-stat:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .education-stat h4 {
+            margin-bottom: 0.7rem;
+            font-size: 0.9rem;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+        
+        .education-stat p {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .education-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .education-option {
+            padding: 1.5rem;
+            border: 2px solid var(--gray-light);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            background: var(--card-bg);
+        }
+        
+        .education-option:hover {
+            border-color: var(--primary-light);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .education-option.selected {
+            background: rgba(67, 97, 238, 0.05);
+            border-color: var(--primary);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.1);
+        }
+        
+        .month-end-summary {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-top: 2rem;
+            border-left: 5px solid var(--warning);
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--footer-bg);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+            margin-top: 4rem;
+        }
+        
+        /* Naviqasiya üçün əlavə CSS */
+        .nav-link {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            opacity: 0.8;
+        }
+
+        /* Bölmələr üçün */
+        .section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            display: none;
+        }
+
+        .section.active {
+            opacity: 1;
+            transform: translateY(0);
+            display: block;
+        }
+
+        /* Accordion üçün */
+        .option-header {
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.3s ease;
+        }
+
+        .option-header:hover {
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+
+        .option-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .option-content.active {
+            max-height: 2000px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 1.2rem;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            nav ul li {
+                margin: 0 0.5rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .challenge-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .systems-status {
+                grid-template-columns: 1fr;
+            }
+            
+            .savings-input {
+                flex-direction: column;
+            }
+            
+            .expense-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .education-options {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Animation for cards */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .card, .system-card, .stat-card, .tip-card {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        /* Goals List */
+        .goals-list {
+            margin-top: 2rem;
+        }
+        
+        .goal-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-light);
+            transition: var(--transition);
+        }
+        
+        .goal-item:hover {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+        
+        .goal-item:last-child {
+            border-bottom: none;
+        }
+        
+        .goal-info {
+            flex: 1;
+        }
+        
+        .goal-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .goal-details {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        
+        .goal-progress {
+            width: 150px;
+        }
+        
+        .goal-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .goal-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+        
+        .goal-btn.edit {
+            background-color: var(--primary-light);
+            color: white;
+        }
+        
+        .goal-btn.delete {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .goal-btn.complete {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .goal-btn:hover {
+            opacity: 0.9;
+        }
+        
+        /* Reset buttons container */
+        .reset-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        /* Education option header styles */
+        .option-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: 1.5rem;
+            border: 2px solid var(--gray-light);
+            border-radius: var(--radius);
+            transition: var(--transition);
+        }
+        
+        .option-header:hover {
+            border-color: var(--primary-light);
+        }
+        
+        .option-content {
+            display: none;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border-radius: 0 0 var(--radius) var(--radius);
+            margin-top: 1rem;
+            border-top: 1px solid var(--gray-light);
+        }
+        
+        .option-content.active {
+            display: block;
+            animation: fadeInUp 0.4s ease-out;
+        }
+        
+        .toggle-icon {
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: var(--transition);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+                margin-bottom: 10px;
+            }
+            
+            nav ul {
+                margin-top: 1.2rem;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            nav ul li {
+                margin: 0 0.5rem;
+            }
+            
+            .hero {
+                padding: 2.5rem 0;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+                line-height: 1.3;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+                padding: 0 10px;
+            }
+            
+            .section {
+                padding: 2rem 0;
+            }
+            
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+            
+            .card {
+                padding: 1.5rem;
+            }
+            
+            .dashboard {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+            
+            .stat-card {
+                padding: 1.5rem;
+            }
+            
+            .stat-card h3 {
+                font-size: 1.5rem;
+            }
+            
+            .savings-tips {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .tip-card {
+                padding: 1.5rem;
+            }
+            
+            .expense-form {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .savings-input {
+                flex-direction: column;
+            }
+            
+            .challenge-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .systems-status {
+                grid-template-columns: 1fr;
+            }
+            
+            .education-options {
+                grid-template-columns: 1fr;
+            }
+            .goal-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .goal-progress {
+                width: 100%;
+            }
+            
+            .goal-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .goal-btn {
+                flex: 1;
+                text-align: center;
+            }
+            
+            .simulation-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+            
+            .simulation-stat {
+                padding: 1rem;
+            }
+            
+            .simulation-stat p {
+                font-size: 1.2rem;
+            }
+            
+            .day-counter {
+                overflow-x: auto;
+                padding-bottom: 10px;
+                justify-content: flex-start;
+            }
+            
+            .day-indicator {
+                min-width: 30px;
+                height: 30px;
+                font-size: 0.8rem;
+            }
+            
+            .notification {
+                max-width: 90%;
+                right: 5%;
+                bottom: 15px;
+                padding: 1rem;
+            }
+            
+            .reset-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .option-header {
+                padding: 1rem;
+            }
+            
+            .option-content {
+                padding: 1rem;
+            }
+        }
+        [data-theme="dark"] {
+    /* Digər mövcud dəyişənlər... */
+    
+    /* Bütün kartları qara rəngdə etmək üçün əlavə edin */
+    --card-bg: #000000;
+    --gray-light: #1a1a1a;
+    
+    /* Xüsusi kart növləri üçün */
+    .card, .tip-card, .stat-card, .system-card, .challenge-option, .education-option {
+        background-color: #000000 !important;
+        border: 1px solid #333333 !important;
+    }
+    
+    /* Seçilmiş kart üçün fərqli bir rəng (məsələn, tünd boz) */
+    .challenge-option.selected, .education-option.selected {
+        background-color: #1a1a1a !important;
+        border-color: var(--primary) !important;
+    }
+    
+    /* Form elementləri */
+    .form-control {
+        background-color: #1a1a1a !important;
+        color: #e0e0e0 !important;
+        border-color: #333333 !important;
+    }
+    
+    /* Progress bar arxa planları */
+    .progress-bar {
+        background-color: #1a1a1a !important;
+    }
+}
+[data-theme="dark"] {
+    /* Digər mövcud dəyişənlər... */
+    
+    /* Nəticə kartları (effekt cards) */
+    .effect-card {
+        background-color: #000000 !important;
+        border: 2px solid #333333 !important;
+        color: #e0e0e0 !important;
+    }
+    
+    /* Seçilmiş nəticə kartı */
+    .effect-card.selected {
+        background-color: #1a1a1a !important;
+        border-color: var(--primary) !important;
+    }
+    
+    /* Effekt itemləri */
+    .effect-item {
+        background-color: #1a1a1a !important;
+        color: #e0e0e0 !important;
+    }
+    
+    .effect-positive {
+        border-left: 3px solid var(--success) !important;
+    }
+    
+    .effect-negative {
+        border-left: 3px solid var(--danger) !important;
+    }
+    
+    .effect-neutral {
+        border-left: 3px solid var(--gray) !important;
+    }
+    
+    /* Nəticə mesajı konteyneri */
+    #decision-result, #month-summary, #game-over {
+        background-color: #000000 !important;
+        border-left-color: var(--primary) !important;
+        color: #e0e0e0 !important;
+    }
+    
+    #month-summary {
+        border-left-color: var(--warning) !important;
+    }
+    
+    #game-over {
+        border-left-color: var(--danger) !important;
+    }
+}
+    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-crown"></i>
+                    <span>Budget Manager</span>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#goal" class="nav-link">Məqsədlər</a></li>
+                        <li><a href="#progress" class="nav-link">Tərəqqi</a></li>
+                        <li><a href="#expense-tracker" class="nav-link">Xərc İzləyici</a></li>
+                        <li><a href="#simulation" class="nav-link">Simulyasiya</a></li>
+                        <li><a href="#education" class="nav-link">Maliyyə Təhsili</a></li>
+                        <li>
+                            <button id="theme-toggle" class="theme-toggle">
+                                <i class="fas fa-moon"></i>
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <section class="hero">
+        <div class="container">
+            <h1>Budget Manager - Ağıllı Maliyyə Təhsili</h1>
+            <p>Maliyyə biliklərinizi artırın, qənaət edin və fırıldaqçılardan qorunun. Kredit, faiz, ipoteka və digər maliyyə anlayışlarını öyrənin!</p>
+            <a href="#expense-tracker" class="btn nav-link">
+                <i class="fas fa-chart-line"></i>
+                Xərcləri İzlə
+            </a>
+        </div>
+    </section>
+
+    <div class="container">
+        <section id="goal" class="section active">
+            <h2 class="section-title">Maliyyə Məqsədlərinizi Müəyyənləşdirin</h2>
+            <div class="card goal-form">
+                <div class="form-group">
+                    <label for="goal-name">Məqsədiniz nədir?</label>
+                    <input type="text" id="goal-name" class="form-control" placeholder="Məsələn: Yeni maşın, Ev üçün, Tətil" maxlength="21">
+                </div>
+                <div class="form-group">
+                    <label for="goal-amount">Nə qədər pul toplamaq istəyirsiniz? (AZN)</label>
+                    <input type="number" id="goal-amount" class="form-control" placeholder="Məsələn: 5000" max="999999999999999999999">
+                </div>
+                <div class="form-group">
+                    <label for="goal-date">Məqsəd tarixi</label>
+                    <input type="date" id="goal-date" class="form-control">
+                </div>
+                <button id="set-goal" class="btn">Məqsədi Təyin Et</button>
+            </div>
+            
+            <div class="goals-list">
+                <h3 style="margin-bottom: 1.5rem;">Aktiv Məqsədləriniz</h3>
+                <div id="goals-container">
+                    <!-- Məqsədlər burada görünəcək -->
+                </div>
+            </div>
+        </section>
+
+        <section id="progress" class="section">
+            <h2 class="section-title">Tərəqqinizi İzləyin</h2>
+            <div class="card">
+                <div id="goal-display">
+                    <h3>Aktiv Məqsəd: <span id="current-goal-name">Yoxdur</span></h3>
+                    <p>Hədəf: <span id="current-goal-amount">0</span> AZN</p>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress" id="goal-progress" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-info">
+                        <span id="saved-amount">0 AZN</span>
+                        <span id="goal-target">0 AZN</span>
+                    </div>
+                </div>
+                
+                <div class="daily-savings">
+                    <h3>Bu gün nə qədər qənaət etdiniz?</h3>
+                    <div class="savings-input">
+                        <input type="number" id="daily-saving" class="form-control" placeholder="Məsələn: 10" max="999999999999999999999">
+                        <button id="add-saving" class="btn">Əlavə Et</button>
+                    </div>
+                    <div id="goal-completed-message" class="goal-completed" style="display: none;">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <strong>Təbriklər!</strong> Məqsədinizə çatdınız!
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="reset-buttons">
+                    <button id="reset-active-goal" class="btn btn-warning">
+                        <i class="fas fa-redo"></i>
+                        Aktiv Məqsədi Sıfırla
+                    </button>
+                    <button id="reset-progress" class="btn btn-danger">
+                        <i class="fas fa-trash"></i>
+                        Bütün Məqsədləri Sıfırla
+                    </button>
+                </div>
+            </div>
+            
+            <div class="dashboard">
+                <div class="stat-card">
+                    <h3 id="days-left">0</h3>
+                    <p>Qalan Gün</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="daily-target">0 AZN</h3>
+                    <p>Gündəlik Hədəf</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="total-saved">0 AZN</h3>
+                    <p>Ümumi Qənaət</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="completion-percent">0%</h3>
+                    <p>Tamamlanma</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="expense-tracker" class="section">
+            <h2 class="section-title">Xərc İzləyici</h2>
+            <div class="expense-tracker">
+                <h3>Aylıq Xərclərinizi Əlavə Edin</h3>
+                <p>Bu ay nəyə pul xərclədiniz? Market, nəqliyyat, əyləncə və s. kateqoriyalarda xərclərinizi qeyd edin.</p>
+                
+                <div class="expense-form">
+                    <input type="text" id="expense-name" class="form-control" placeholder="Xərc adı (məs: Market)" maxlength="21">
+                    <input type="number" id="expense-amount" class="form-control" placeholder="Məbləğ (AZN)" max="999999999999999999999">
+                    <select id="expense-category" class="form-control">
+                        <option value="market">Market</option>
+                        <option value="transport">Nəqliyyat</option>
+                        <option value="entertainment">Əyləncə</option>
+                        <option value="health">Sağlamlıq</option>
+                        <option value="education">Təhsil</option>
+                        <option value="utilities">Kommunal</option>
+                        <option value="clothing">Geyim</option>
+                        <option value="other">Digər</option>
+                    </select>
+                    <button id="add-expense" class="btn">Xərci Əlavə Et</button>
+                </div>
+                
+                <div class="expense-list">
+                    <h4>Bu aykı Xərclər</h4>
+                    <div id="expenses-container">
+                        <!-- Xərclər burada görünəcək -->
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="expense-chart"></canvas>
+                </div>
+                
+                <!-- Reset düyməsi burada əlavə edildi -->
+                <div style="margin-top: 2rem; text-align: center;">
+                    <button id="reset-expenses" class="btn btn-warning">
+                        <i class="fas fa-trash-alt"></i>
+                        Aylıq Xərcləri Sıfırla
+                    </button>
+                </div>
+                
+                <!-- AI tövsiyə bölməsi -->
+                <div class="ai-recommendations">
+                    <h3><i class="fas fa-robot"></i> Xərc Tövsiyələri</h3>
+                    <p>Xərclərinizə əsasən sizin üçün şəxsi qənaət tövsiyələri:</p>
+                    <div id="ai-recommendations-container">
+                        <!-- AI tövsiyələri burada görünəcək -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="simulation" class="section">
+            <div class="section-title">
+                <h2>Maliyyə Simulyasiyası</h2>
+            </div>
+            <div class="simulation-section">
+                <p>Bu simulyasiyada həyatınızın müxtəlif sahələri ilə bağlı real problemlərlə qarşılaşacaqsınız. Hər qərarınızın pul, sağlamlıq, ailə, iş və sosial həyatınıza təsiri olacaq. Balanslı qərarlar verin və həyatınızı idarə edin!</p>
+                
+                <div class="simulation-stats">
+                    <div class="simulation-stat">
+                        <h4>Aylıq Gəlir</h4>
+                        <p id="monthly-income">1500 AZN</p>
+                    </div>
+                    <div class="simulation-stat">
+                        <h4>Cari Balans</h4>
+                        <p id="current-balance">1500 AZN</p>
+                    </div>
+                    <div class="simulation-stat">
+                        <h4>Ayın Günü</h4>
+                        <p id="current-day">1 / 30</p>
+                    </div>
+                    <div class="simulation-stat">
+                        <h4>Ümumi Qənaət</h4>
+                        <p id="total-savings">0 AZN</p>
+                    </div>
+                </div>
+                
+                <div class="systems-status">
+                    <div class="system-card health">
+                        <div class="system-header health">
+                            <i class="fas fa-heartbeat"></i>
+                            <h3>Sağlamlıq</h3>
+                        </div>
+                        <div class="system-bar">
+                            <div class="system-fill health" id="health-fill" style="width: 100%"></div>
+                        </div>
+                        <div class="system-value">
+                            <span>Vəziyyət</span>
+                            <span id="health-value">100%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="system-card family">
+                        <div class="system-header family">
+                            <i class="fas fa-home"></i>
+                            <h3>Ailə</h3>
+                        </div>
+                        <div class="system-bar">
+                            <div class="system-fill family" id="family-fill" style="width: 100%"></div>
+                        </div>
+                        <div class="system-value">
+                            <span>Vəziyyət</span>
+                            <span id="family-value">100%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="system-card work">
+                        <div class="system-header work">
+                            <i class="fas fa-briefcase"></i>
+                            <h3>İş</h3>
+                        </div>
+                        <div class="system-bar">
+                            <div class="system-fill work" id="work-fill" style="width: 100%"></div>
+                        </div>
+                        <div class="system-value">
+                            <span>Vəziyyət</span>
+                            <span id="work-value">100%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="system-card social">
+                        <div class="system-header social">
+                            <i class="fas fa-users"></i>
+                            <h3>Sosial Həyat</h3>
+                        </div>
+                        <div class="system-bar">
+                            <div class="system-fill social" id="social-fill" style="width: 100%"></div>
+                        </div>
+                        <div class="system-value">
+                            <span>Vəziyyət</span>
+                            <span id="social-value">100%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="day-counter">
+                    <!-- Gün göstəriciləri JavaScript ilə doldurulacaq -->
+                </div>
+                
+                <div id="daily-challenge" class="daily-challenge">
+                    <h3 class="challenge-title" id="challenge-title">Bugünkü Problem</h3>
+                    <p id="challenge-description">Problem təsviri burada göstəriləcək.</p>
+                    
+                    <div class="challenge-options" id="challenge-options">
+                        <!-- Seçimlər JavaScript ilə doldurulacaq -->
+                    </div>
+                    
+                    <div style="margin-top: 2rem; text-align: center;">
+                        <button id="make-decision" class="btn" disabled>
+                            <i class="fas fa-check-circle"></i>
+                            Qərar Ver
+                        </button>
+                        <button id="next-day" class="btn btn-secondary" style="display: none;">
+                            <i class="fas fa-arrow-right"></i>
+                            Növbəti Gün
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="decision-result" class="month-summary" style="display: none;">
+                    <h3>Qərarınızın Nəticəsi</h3>
+                    <p id="result-message">Nəticə mesajı burada göstəriləcək.</p>
+                </div>
+                
+                <div id="month-summary" class="month-summary" style="display: none;">
+                    <h3>Ayın Xülasəsi</h3>
+                    <p id="month-summary-text">Ayın xülasəsi burada göstəriləcək.</p>
+                    <button id="restart-simulation" class="btn btn-success" style="margin-top: 1.5rem;">
+                        <i class="fas fa-redo"></i>
+                        Yeni Ay Başlat
+                    </button>
+                </div>
+                
+                <div id="game-over" class="game-over" style="display: none;">
+                    <h3 style="color: var(--danger);">Oyun Bitdi!</h3>
+                    <p id="game-over-message">Oyun bitmə səbəbi burada göstəriləcək.</p>
+                    <button id="restart-game" class="btn" style="margin-top: 1.5rem;">
+                        <i class="fas fa-redo"></i>
+                        Yenidən Başla
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="education" class="section">
+            <div class="section-title">
+                <h2>Maliyyə Təhsili</h2>
+            </div>
+            <div class="education-section">
+                <p>Maliyyə dünyasını daha yaxşı başa düşmək üçün vacib anlayışlar, fırıldaqçılıq üsulları və onlardan qorunma yolları haqqında məlumatlar.</p>
+                
+                <div class="education-options">
+                    <div class="education-option">
+                        <div class="option-header">
+                            <h3>Kredit və Faizlər</h3>
+                            <span class="toggle-icon">+</span>
+                        </div>
+                        <div class="option-content">
+                            <h4>Kredit nədir?</h4>
+                            <p>Kredit, bir şəxs və ya təşkilatın (kreditor) digər şəxsə (debitor) müəyyən şərtlərlə pul verməsidir. Debitor krediti müəyyən müddət ərzində, adətən faizlə birlikdə geri qaytarmalıdır.</p>
+                            
+                            <h4>Faiz nədir?</h4>
+                            <p>Faiz, kreditin istifadəsi üçün ödənilən qiymətdir. Faiz iki əsas növə bölünür:</p>
+                            <ul>
+                                <li><strong>Sadə faiz:</strong> Yalnız əsas məbləğ (kapital) üzərindən hesablanır.</li>
+                                <li><strong>Mürəkkəb faiz:</strong> Həm kapital, həm də əvvəlki dövrlərin faizləri üzərindən hesablanır.</li>
+                            </ul>
+                            
+                            <h4>Kredit götürərkən nələrə diqqət etməlisiniz?</h4>
+                            <ul>
+                                <li><strong>Faiz dərəcəsi:</strong> Müqayisəli faiz dərəcəsi (APR) kreditin əsl dəyərini göstərir.</li>
+                                <li><strong>Kredit müddəti:</strong> Nə qədər uzun müddət, bir o qədər çox faiz ödəyəcəksiniz.</li>
+                                <li><strong>Ödəniş planı:</strong> Aylıq ödənişlərin büdcənizə uyğun olub-olmadığını yoxlayın.</li>
+                                <li><strong>Əlavə xərclər:</strong> Komissiya, müraciət haqqı, erkən ödəniş cərimələri kimi gizli xərclər ola bilər.</li>
+                                <li><strong>Kredit tarixçəsi:</strong> Yaxşı kredit tarixçəsi daha aşağı faiz dərəcəsi deməkdir.</li>
+                            </ul>
+                            
+                            <h4>Kredit tələlərindən qorunmaq üçün:</h4>
+                            <ul>
+                                <li>Yalnız ehtiyac olduqda kredit götürün</li>
+                                <li>Müxtəlif təklifləri müqayisə edın</li>
+                                <li>Kiçik mətnləri diqqətlə oxuyun</li>
+                                <li>Həddindən artıq borclanmadan qaçının</li>
+                                <li>Ödənişlərinizi vaxtında edin</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="education-option">
+                        <div class="option-header">
+                            <h3>İpoteka</h3>
+                            <span class="toggle-icon">+</span>
+                        </div>
+                        <div class="option-content">
+                            <h4>İpoteka nədir?</h4>
+                            <p>İpoteka, daşınmaz əmlak (ev, mənzil, torpaq) alınması üçün verilən uzunmüddətli kredit növüdür. Əmlak kreditin təminatı kimi xidmət edir - borc ödənilmədiyi təqdirdə kreditor əmlakı satmaq hüququna malikdir.</p>
+                            
+                            <h4>İpoteka növləri:</h4>
+                            <ul>
+                                <li><strong>Sabit faizli ipoteka:</strong> Bütün kredit müddəti ərzində faiz dərəcəsi dəyişmir.</li>
+                                <li><strong>Dəyişkən faizli ipoteka:</strong> Faiz dərəcəsi bazar şərtlərinə uyğun olaraq dəyişir.</li>
+                                <li><strong>Qarışıq ipoteka:</strong> Müəyyən müddət sabit faiz, sonra dəyişkən faiz tətbiq olunur.</li>
+                            </ul>
+                            
+                            <h4>İpoteka götürərkən nələrə diqqət etməlisiniz?</h4>
+                            <ul>
+                                <li><strong>İlkin ödəniş:</strong> Ümumiyyətlə, əmlakın dəyərinin 10-20%-i qədər ilkin ödəniş tələb olunur.</li>
+                                <li><strong>Faiz dərəcəsi:</strong> Uzun müddətli kredit olduğu üçün faiz dərəcəsi çox önəmlidir.</li>
+                                <li><strong>Kredit müddəti:</strong> Adətən 15, 20 və ya 30 illik müddət üçün verilir.</li>
+                                <li><strong>Əlavə xərclər:</strong> Notarius, qiymətləndirmə, sığorta, vergilər kimi xərcləri nəzərə alın.</li>
+                                <li><strong>Gəlir şərtləri:</strong> Kredit ödənişləri aylıq gəlirinizin 30-40%-dən çox olmamalıdır.</li>
+                            </ul>
+                            
+                            <h4>İpoteka riskləri:</h4>
+                            <ul>
+                                <li><strong>Faiz artımı riski:</strong> Dəyişkən faizli ipotekalarda faiz artımı ödənişləri artıra bilər.</li>
+                                <li><strong>Əmlak dəyərinin azalması:</strong> Bazar şəraitindən asılı olaraq əmlakın dəyəri aşağı düşə bilər.</li>
+                                <li><strong>Gəlir itkisi:</strong> İşsiz qalma və ya gəlirin azalması halında kredit ödənişləri problem yarada bilər.</li>
+                                <li><strong>Valyuta riski:</strong> Xarici valyutada kredit götürdüyünüz təqdirdə valyuta məzənnəsinin dəyişməsi riski var.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="education-option">
+                        <div class="option-header">
+                            <h3>Fırıldaqçılıq Üsulları</h3>
+                            <span class="toggle-icon">+</span>
+                        </div>
+                        <div class="option-content">
+                            <h4>Ən Çox Yayılmış Maliyyə Fırıldaqçılığı Üsulları:</h4>
+                            
+                            <h5>1. "Qazanclı İnvestisiya" Fırıldaqçılığı</h5>
+                            <p><strong>Üsul:</strong> Sizə yüksək gəlir və ya "zəmanətli" qazanc vəd edirlər. İlkin investisiyanızı etdikdən sonra pulunuzu itirirsiniz.</p>
+                            <p><strong>Qorunma:</strong> Həddindən artıq yüksək gəlir vəd edən təkliflərə inanmayın. İnvestisiya etməzdən əvvəl şirkətin lisenziyasını və şəxsiyyətini yoxlayın.</p>
+                            
+                            <h5>2. "Qazanclı İş" Fırıldaqçılığı</h5>
+                            <p><strong>Üsul:</strong> Evdə iş, asan qazanc vəd edirlər. İşə başlamaq üçün pul tələb edirlər, sonra yoxa çıxırlar.</p>
+                            <p><strong>Qorunma:</strong> İşə qəbul üçün pul ödəməyin. Rəsmi iş müqaviləsi olmadan heç bir işə başlamayın.</p>
+                            
+                            <h5>3. "Bank/Fiscal" Fırıldaqçılığı</h5>
+                            <p><strong>Üsul:</strong> Bank və ya vergi orqanlarından olduqlarını iddia edərək, şəxsi məlumatlarınızı və ya pulunuzu tələb edirlər.</p>
+                            <p><strong>Qorunma:</strong> Bank və ya dövlət orqanları heç vaxt telefonla şəxsi məlumatlarınızı və ya pul tələb etməz. Birbaşa bankla əlaqə saxlayın.</p>
+                            
+                            <h5>4. "Sevimli Aldatma" Fırıldaqçılığı</h5>
+                            <p><strong>Üsul:</strong> Onlayn tanışlıq saytlarında sevgiliniz kimi görünərək, vaxtı gəldikdə pul tələb edirlər.</p>
+                            <p><strong>Qorunma:</strong> İnternetdə tanış olduğunuz şəxslərə pul köçürməyin. Şəxsi görüş təşkil etmədən əlaqəni davam etdirməyin.</p>
+                            
+                            <h5>5. "Lotereya/Mükafat" Fırıldaqçılığı</h5>
+                            <p><strong>Üsul:</strong> Böyük mükafat qazandığınızı bildirərək, mükafatı almaq üçün pul ("vergi", "komissiya" kimi) tələb edirlər.</p>
+                            
+                            
+                            <h4>Ümumi Qorunma Tövsiyələri:</h4>
+                            <ul>
+                                <li>Şəxsi məlumatlarınızı (şifrələr, bank kartı məlumatları) heç kimlə paylaşmayın</li>
+                                <li>Həddindən artıq yaxşı görünən təkliflərə şübhə ilə yanaşın</li>
+                                <li>Rəsmi qurumlarla birbaşa əlaqə saxlayın</li>
+                                <li>Şübhəli mesajları və zəngləri cavabsız buraxın</li>
+                                <li>Maliyyə əməliyyatlarından əvvəl yaxınlarınıza məsləhət alın</li>
+                                <li>Fırıldaqçılıq hallarını polisə və banklara məlumat verin</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="education-option">
+                        <div class="option-header">
+                            <h3>Qənaət və İnvestisiya</h3>
+                            <span class="toggle-icon">+</span>
+                        </div>
+                        <div class="option-content">
+                            <h4>Qənaət Etməyin Əsas Prinsipləri:</h4>
+                            
+                            <h5>1. Büdcə Planlaşdırması</h5>
+                            <p>Gəlir və xərclərinizi izləyin. Hər ay müəyyən məbləği qənaət üçün ayırın. "Əvvəl qənaət et, sonra xərclə" prinsipinə əməl edin.</p>
+                            
+                            <h5>2. Kiçik Addımlarla Başlayın</h5>
+                            <p>Gəlirinizin ən azı 10%-ni qənaət etməyə çalışın. Kiçik məbləğlərlə başlayın və tədricən artırın.</p>
+                            
+                            <h5>3. Təcili Fondu Yaradın</h5>
+                            <p>3-6 aylıq xərclərinizi ödəyə biləcək təcili fondu yaradın. Bu, gözlənilməzi xərclər və işsizlik halında sizi qoruyacaq.</p>
+                            
+                            <h5>4. Avtomatik Qənaət</h5>
+                            <p>Maaşınızın müəyyən faizini birbaşa qənaət hesabınıza köçürmək üçün avtomatik köçürmə təyin edin.</p>
+                            
+                            <h4>İnvestisiya Əsasları:</h4>
+                            
+                            <h5>1. Risk və Gəlir Balansı</h5>
+                            <p>Yüksək risk yüksək gəlir gətirə bilər, lakin itki riski də yüksəkdir. Risk tolerantlığınıza uyğun investisiya edin.</p>
+                            
+                            <h5>2. Müxtəlifləşdirmə</h5>
+                            <p>Bütün yumurtalarınızı bir səbətə qoymayın. Müxtəlif aktivlərə (səhm, istiqraz, daşınmaz əmlak) investisiya edin.</p>
+                            
+                            <h5>3. Uzunmüddətli Perspektiv</h5>
+                            <p>İnvestisiyalar ümumiyyətlə uzun müddətdə daha yaxşı nəticə verir. Qısamüddətli bazar dalğalanmalarına reaksiya verməyin.</p>
+                            
+                            <h5>4. Müntəzəm İnvestisiya</h5>
+                            <p>Hər ay müəyyən məbləği investisiya edin. Bu, bazarın zirvələrində və aşağı nöqtələrində alış etməklə orta qiyməti aşağı salır.</p>
+                            
+                            <h4>İnvestisiya Seçimləri:</h4>
+                            <ul>
+                                <li><strong>Bank depozitləri:</strong> Aşağı risk, aşağı gəlir. Təcili fond üçün yaxşıdır.</li>
+                                <li><strong>Səhmlər:</strong> Orta/yüksək risk, yüksək gəlir potensialı. Uzunmüddətli investisiya üçün yaxşıdır.</li>
+                                <li><strong>İstiqrazlar:</strong> Aşağı/orta risk, sabit gəlir. Mühafizəkar investorlar üçün yaxşıdır.</li>
+                                <li><strong>Daşınmaz əmlak:</strong> Orta risk, sabit gəlir və dəyər artımı. Uzunmüddətli investisiya üçün yaxşıdır.</li>
+                                <li><strong>Qızıl və digər qiymətli metallar:</strong> İnflyasiya qorunması. Portfelin müxtəlifləşdirilməsi üçün yaxşıdır.</li>
+                            </ul>
+                            
+                            <h4>İnvestisiya Tələlərindən Qaçın:</h4>
+                            <ul>
+                                <li>Emosiyalarla investisiya etməyin</li>
+                                <li>Yüksək riskli "tez varlanma" sxemlərinə aldanmayın</li>
+                                <li>Anlaşılmaz investisiya alətlərindən uzaq durun</li>
+                                <li>Borcla investisiya etməyin</li>
+                                <li>Maliyyə məsləhətçilərinin motivasiyasını araşdırın</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="notification" class="notification">
+        <i class="fas fa-check-circle"></i> 
+        <span id="notification-text">Əməliyyat uğurla tamamlandı!</span>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>Budget Manager &copy; 2025 - Ağıllı Maliyyə Təhsili</p>
+        </div>
+    </footer>
+    <script>
+        // === SİSTEM YOXLAMASI ===
+        console.log("🔄 Sistem yoxlaması başladılır...");
+
+        // Global xəta idarəetməsi
+        window.addEventListener('error', function(e) {
+            console.error('❌ Global xəta:', e.error);
+            console.error('📄 Fayl:', e.filename);
+            console.error('📍 Sətir:', e.lineno);
+        });
+
+        // Promise xətaları
+        window.addEventListener('unhandledrejection', function(e) {
+            console.error('❌ Promise xətası:', e.reason);
+        });
+
+        // Məqsəd məlumatlarını saxlamaq
+        let userGoals = [];
+        let activeGoalIndex = 0;
+
+        // Xərc məlumatlarını saxlamaq
+        let expenses = [];
+
+        // Maliyyə simulyasiyası üçün dəyişənlər
+        let simulationData = {
+            monthlyIncome: 1500,
+            currentBalance: 1500,
+            currentDay: 1,
+            totalDays: 30,
+            totalSavings: 0,
+            selectedOption: null,
+            isMonthCompleted: false,
+            isGameOver: false,
+            health: 100,
+            family: 100,
+            work: 100,
+            social: 100,
+            usedQuestions: new Set()
+        };
+
+        // 150 müxtəlif sual yaradırıq
+        const dailyChallenges = generateBalancedQuestions(150);
+
+        // Elementləri seçmək
+        const setGoalBtn = document.getElementById('set-goal');
+        const goalNameInput = document.getElementById('goal-name');
+        const goalAmountInput = document.getElementById('goal-amount');
+        const goalDateInput = document.getElementById('goal-date');
+        const dailySavingInput = document.getElementById('daily-saving');
+        const addSavingBtn = document.getElementById('add-saving');
+        const goalProgress = document.getElementById('goal-progress');
+        const savedAmountEl = document.getElementById('saved-amount');
+        const goalTargetEl = document.getElementById('goal-target');
+        const daysLeftEl = document.getElementById('days-left');
+        const dailyTargetEl = document.getElementById('daily-target');
+        const totalSavedEl = document.getElementById('total-saved');
+        const completionPercentEl = document.getElementById('completion-percent');
+        const currentGoalNameEl = document.getElementById('current-goal-name');
+        const currentGoalAmountEl = document.getElementById('current-goal-amount');
+        const goalCompletedMessage = document.getElementById('goal-completed-message');
+        const resetProgressBtn = document.getElementById('reset-progress');
+        const resetActiveGoalBtn = document.getElementById('reset-active-goal');
+        const goalsContainer = document.getElementById('goals-container');
+
+        // Xərc izləyici üçün elementlər
+        const expenseNameInput = document.getElementById('expense-name');
+        const expenseAmountInput = document.getElementById('expense-amount');
+        const expenseCategoryInput = document.getElementById('expense-category');
+        const addExpenseBtn = document.getElementById('add-expense');
+        const expensesContainer = document.getElementById('expenses-container');
+        const expenseChartCanvas = document.getElementById('expense-chart');
+
+        // Simulyasiya bölməsi üçün elementlər
+        const monthlyIncomeEl = document.getElementById('monthly-income');
+        const currentBalanceEl = document.getElementById('current-balance');
+        const currentDayEl = document.getElementById('current-day');
+        const totalSavingsEl = document.getElementById('total-savings');
+        const challengeTitleEl = document.getElementById('challenge-title');
+        const challengeDescriptionEl = document.getElementById('challenge-description');
+        const challengeOptionsEl = document.getElementById('challenge-options');
+        const makeDecisionBtn = document.getElementById('make-decision');
+        const nextDayBtn = document.getElementById('next-day');
+        const decisionResultEl = document.getElementById('decision-result');
+        const resultMessageEl = document.getElementById('result-message');
+        const monthSummaryEl = document.getElementById('month-summary');
+        const monthSummaryTextEl = document.getElementById('month-summary-text');
+        const restartSimulationBtn = document.getElementById('restart-simulation');
+        const gameOverEl = document.getElementById('game-over');
+        const gameOverMessageEl = document.getElementById('game-over-message');
+        const restartGameBtn = document.getElementById('restart-game');
+        const dayCounterEl = document.querySelector('.day-counter');
+
+        // Sistem elementləri
+        const healthFillEl = document.getElementById('health-fill');
+        const healthValueEl = document.getElementById('health-value');
+        const familyFillEl = document.getElementById('family-fill');
+        const familyValueEl = document.getElementById('family-value');
+        const workFillEl = document.getElementById('work-fill');
+        const workValueEl = document.getElementById('work-value');
+        const socialFillEl = document.getElementById('social-fill');
+        const socialValueEl = document.getElementById('social-value');
+
+        const notification = document.getElementById('notification');
+        const notificationText = document.getElementById('notification-text');
+
+        // Chart.js obyekti
+        let expenseChart = null;
+
+        // Naviqasiya sistemi - DÜZƏLDİLMİŞ VERSİYA
+        function initializeNavigation() {
+            console.log("🔄 Naviqasiya sistemi başladılır...");
+            
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.section');
+            
+            console.log(`📊 Tapılan nav linkləri: ${navLinks.length}`);
+            console.log(`📊 Tapılan bölmələr: ${sections.length}`);
+            
+            // İlk bölməni aktiv et
+            if (sections.length > 0) {
+                sections[0].classList.add('active');
+                console.log("✅ İlk bölmə aktiv edildi");
+            }
+            
+            navLinks.forEach((link, index) => {
+                console.log(`🔗 Nav link ${index + 1}: ${link.getAttribute('href')}`);
+                
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log("🖱️ Nav link kliklendi:", this.getAttribute('href'));
+                    
+                    const targetId = this.getAttribute('href').substring(1);
+                    console.log("🎯 Hədəf ID:", targetId);
+                    
+                    // Bütün bölmələri gizlə
+                    sections.forEach(section => {
+                        section.classList.remove('active');
+                        console.log(`📦 ${section.id} bölməsi gizləndi`);
+                    });
+                    
+                    // Hədəf bölməni göstər
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        targetSection.classList.add('active');
+                        console.log(`✅ ${targetId} bölməsi aktiv edildi`);
+                        
+                        // Səhifəni aşağı sürüşdür
+                        setTimeout(() => {
+                            targetSection.scrollIntoView({ 
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }, 100);
+                    } else {
+                        console.log(`❌ ${targetId} bölməsi tapılmadı`);
+                    }
+                });
+            });
+            
+            console.log("✅ Naviqasiya sistemi hazırdır");
+        }
+
+        // Maliyyə Təhsili Accordion - DÜZƏLDİLMİŞ VERSİYA
+        function initializeEducationAccordion() {
+            console.log("🔄 Təhsil accordion başladılır...");
+            
+            const optionHeaders = document.querySelectorAll('.education-option .option-header');
+            console.log(`📊 Tapılan accordion başlıqları: ${optionHeaders.length}`);
+            
+            optionHeaders.forEach((header, index) => {
+                console.log(`📖 Accordion başlıq ${index + 1}: ${header.querySelector('h3').textContent}`);
+                
+                header.addEventListener('click', function() {
+                    console.log("🖱️ Accordion kliklendi:", this.querySelector('h3').textContent);
+                    
+                    const content = this.nextElementSibling;
+                    const toggleIcon = this.querySelector('.toggle-icon');
+                    const isVisible = content.classList.contains('active');
+                    
+                    console.log(`📦 Məzmun vəziyyəti: ${isVisible ? 'açıq' : 'bağlı'}`);
+                    
+                    if (isVisible) {
+                        // Bağla
+                        content.classList.remove('active');
+                        toggleIcon.textContent = '+';
+                        console.log("📕 Məzmun bağlandı");
+                    } else {
+                        // Bütün digər məzmunları bağla
+                        document.querySelectorAll('.option-content').forEach(c => {
+                            c.classList.remove('active');
+                        });
+                        
+                        // Bütün toggle iconları sıfırla
+                        document.querySelectorAll('.toggle-icon').forEach(icon => {
+                            icon.textContent = '+';
+                        });
+                        
+                        // Bu məzmunu aç
+                        content.classList.add('active');
+                        toggleIcon.textContent = '-';
+                        console.log("📗 Məzmun açıldı");
+                    }
+                });
+            });
+            
+            console.log("✅ Təhsil accordion hazırdır");
+        }
+
+        // TEMA SİSTEMİ
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = themeToggle.querySelector('i');
+
+        // Tema dəyişənləri
+        const themeVariables = {
+            light: {
+                '--bg-color': '#f5f7ff',
+                '--text-color': '#212529',
+                '--card-bg': 'white',
+                '--header-bg': 'var(--gradient-primary)',
+                '--footer-bg': 'var(--dark)',
+                '--gray-light': '#e9ecef',
+                '--shadow': '0 4px 20px rgba(0, 0, 0, 0.08)',
+                '--shadow-hover': '0 8px 30px rgba(0, 0, 0, 0.12)'
+            },
+            dark: {
+                '--bg-color': '#121212',
+                '--text-color': '#e0e0e0',
+                '--card-bg': '#1e1e1e',
+                '--header-bg': 'linear-gradient(135deg, #2a2a72, #009ffd)',
+                '--footer-bg': '#0a0a0a',
+                '--gray-light': '#2d2d2d',
+                '--shadow': '0 4px 20px rgba(0, 0, 0, 0.2)',
+                '--shadow-hover': '0 8px 30px rgba(0, 0, 0, 0.3)'
+            }
+        };
+
+        // Tema yüklə
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            applyTheme(savedTheme);
+            updateThemeIcon(savedTheme);
+        }
+
+        // Tema tətbiq et
+        function applyTheme(theme) {
+            const variables = themeVariables[theme];
+            const root = document.documentElement;
+            
+            // CSS dəyişənlərini tətbiq et
+            Object.keys(variables).forEach(variable => {
+                root.style.setProperty(variable, variables[variable]);
+            });
+            
+            // Xüsusi elementlər üçün əlavə tənzimləmələr
+            updateChartTheme(theme);
+            updateCustomElements(theme);
+            
+            // Tema atributunu əlavə et
+            root.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
+
+        // Chart tema yenilə
+        function updateChartTheme(theme) {
+            if (expenseChart) {
+                const isDark = theme === 'dark';
+                
+                // Chart options yenilə
+                expenseChart.options.plugins.title.color = isDark ? '#e0e0e0' : '#212529';
+                expenseChart.options.scales.x.ticks.color = isDark ? '#e0e0e0' : '#212529';
+                expenseChart.options.scales.y.ticks.color = isDark ? '#e0e0e0' : '#212529';
+                
+                expenseChart.update();
+            }
+        }
+
+        // Xüsusi elementləri yenilə
+        // Xüsusi elementləri yenilə
+function updateCustomElements(theme) {
+    const isDark = theme === 'dark';
+    
+    // Form elementləri
+    const formControls = document.querySelectorAll('.form-control');
+    formControls.forEach(control => {
+        control.style.backgroundColor = isDark ? '#1a1a1a' : 'white';
+        control.style.color = isDark ? '#e0e0e0' : '#212529';
+        control.style.borderColor = isDark ? '#333333' : '#e9ecef';
+    });
+    
+    // Card elementləri - HAMISI QARA
+    const cards = document.querySelectorAll('.card, .tip-card, .stat-card, .system-card, .challenge-option, .education-option');
+    cards.forEach(card => {
+        card.style.backgroundColor = isDark ? '#000000' : 'white';
+        card.style.color = isDark ? '#e0e0e0' : '#212529';
+        card.style.borderColor = isDark ? '#333333' : 'rgba(0, 0, 0, 0.03)';
+    });
+    
+    // Seçilmiş kartlar üçün fərqli rəng
+    const selectedCards = document.querySelectorAll('.challenge-option.selected, .education-option.selected');
+    selectedCards.forEach(card => {
+        card.style.backgroundColor = isDark ? '#1a1a1a' : 'rgba(67, 97, 238, 0.05)';
+        card.style.borderColor = isDark ? 'var(--primary)' : 'var(--primary)';
+    });
+    
+    // Progress bar arxa planları
+    const progressBars = document.querySelectorAll('.progress-bar');
+    progressBars.forEach(bar => {
+        bar.style.backgroundColor = isDark ? '#1a1a1a' : '#e9ecef';
+    });
+    
+    // Notification background
+    const notification = document.getElementById('notification');
+    if (notification) {
+        const isError = notification.style.background.includes('var(--gradient-secondary)');
+        if (!isError) {
+            notification.style.background = isDark ? 
+                'linear-gradient(135deg, #2a2a72, #009ffd)' : 
+                'var(--gradient-success)';
+        }
+    }
+}
+
+        // Tema iconunu yenilə
+        function updateThemeIcon(theme) {
+            themeIcon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+
+        // Tema dəyişdir
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            applyTheme(newTheme);
+            updateThemeIcon(newTheme);
+            
+            showNotification(newTheme === 'dark' ? 
+                '🌙 Qaranlıq tema aktiv edildi' : 
+                '☀️ Açıq tema aktiv edildi');
+        }
+
+        // Tema dəyişdirici event
+        themeToggle.addEventListener('click', toggleTheme);
+
+        // Sistem temasını avtomatik yüklə
+        function autoDetectSystemTheme() {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                return 'dark';
+            }
+            return 'light';
+        }
+
+        // Sistem tema dəyişikliyini dinlə
+        function watchSystemTheme() {
+            if (window.matchMedia) {
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                    const systemTheme = e.matches ? 'dark' : 'light';
+                    const currentTheme = localStorage.getItem('theme');
+                    
+                    // Əgər istifadəçi əl ilə tema seçməyibsə, sistem temasını izlə
+                    if (!currentTheme) {
+                        applyTheme(systemTheme);
+                        updateThemeIcon(systemTheme);
+                    }
+                });
+            }
+        }
+
+        // Tema ilə bağlı bütün funksiyaları başlat
+        function initializeThemeSystem() {
+            loadTheme();
+            watchSystemTheme();
+            
+            // Əgər localStorage-da tema yoxdursa, sistem temasını istifadə et
+            if (!localStorage.getItem('theme')) {
+                const systemTheme = autoDetectSystemTheme();
+                applyTheme(systemTheme);
+                updateThemeIcon(systemTheme);
+            }
+        }
+
+        // Bildiriş göstərmək
+        function showNotification(message, isError = false) {
+            notificationText.textContent = message;
+            notification.style.background = isError ? 'var(--gradient-secondary)' : 'var(--gradient-success)';
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // DENGELİ 150 müxtəlif sual yaratmaq funksiyası
+        function generateBalancedQuestions(count) {
+    const questions = 
+        [
+    {
+        "title": "Səhər yeməyi seçimi",
+        "description": "İşə getmək üçün tələsirsiniz. Səhər yeməyi üçün nə seçirsiniz?",
+        "options": [
+            {
+                "text": "Kafe restoran",
+                "cost": 15,
+                "savings": 0,
+                "health": -12,
+                "family": -7,
+                "work": 2,
+                "social": 3,
+                "message": "Kafedə səhər yeməyi yediniz. Ləzzətli idi amma baha başa gəldi."
+            },
+            {
+                "text": "Fast food",
+                "cost": 8,
+                "savings": 7,
+                "health": -8,
+                "family": -7,
+                "work": 1,
+                "social": 0,
+                "message": "Fast food seçdiniz. Ucuz idi amma sağlamlığa zərərli."
+            },
+            {
+                "text": "Evdə hazırla",
+                "cost": 3,
+                "savings": 12,
+                "health": 5,
+                "family": 3,
+                "work": -6,
+                "social": -5,
+                "message": "Evdə yemək hazırladınız. Qənaət etdiniz amma gecikdiniz."
+            }
+        ]
+    },
+    {
+        "title": "Nəqliyyat seçimi",
+        "description": "İşə getmək üçün nəqliyyat vasitəsi seçməlisiniz.",
+        "options": [
+            {
+                "text": "Taksi",
+                "cost": 12,
+                "savings": 0,
+                "health": -7,
+                "family": 0,
+                "work": 5,
+                "social": -10,
+                "message": "Taksi ilə rahat getdiniz amma baha başa gəldi."
+            },
+            {
+                "text": "Öz maşın",
+                "cost": 8,
+                "savings": 4,
+                "health": -10,
+                "family": 2,
+                "work": 3,
+                "social": 0,
+                "message": "Öz maşınınızla getdiniz. Orta qiymətə başa gəldi."
+            },
+            {
+                "text": "Metro/Avtobus",
+                "cost": 1,
+                "savings": 11,
+                "health": 2,
+                "family": -1,
+                "work": -8,
+                "social": 1,
+                "message": "İctimai nəqliyyat istifadə etdiniz. Çox qənaət etdiniz amma gecikdiniz."
+            }
+        ]
+    },
+    {
+        "title": "Geyim alış-verişi",
+        "description": "İş üçün yeni paltar almaq lazımdır. Hansını seçirsiniz?",
+        "options": [
+            {
+                "text": "Dizayner paltar",
+                "cost": 200,
+                "savings": 0,
+                "health": 0,
+                "family": -8,
+                "work": 8,
+                "social": 5,
+                "message": "Dizayner paltar aldınız. Keyfiyyətli amma çox baha."
+            },
+            {
+                "text": "Orta qiymətli",
+                "cost": 80,
+                "savings": 120,
+                "health": 0,
+                "family": 0,
+                "work": 5,
+                "social": -9,
+                "message": "Orta qiymətli paltar aldınız. Yaxşı balans."
+            },
+            {
+                "text": "Endirimdə al",
+                "cost": 40,
+                "savings": 160,
+                "health": 0,
+                "family": 2,
+                "work": 2,
+                "social": -7,
+                "message": "Endirimdə paltar aldınız. Çox qənaət etdiniz."
+            }
+        ]
+    },
+    {
+        "title": "Əyləncə axşamı",
+        "description": "Dostlarınız kinoya dəvət edir. Nə etmək istəyirsiniz?",
+        "options": [
+            {
+                "text": "Kino + restoran",
+                "cost": 50,
+                "savings": 0,
+                "health": -9,
+                "family": 0,
+                "work": -8,
+                "social": 8,
+                "message": "Dostlarınızla bahalı əyləncə keçirdiniz."
+            },
+            {
+                "text": "Yalnız kino",
+                "cost": 20,
+                "savings": 30,
+                "health": -12,
+                "family": 0,
+                "work": 0,
+                "social": 6,
+                "message": "Kino biletinə qənaət etdiniz."
+            },
+            {
+                "text": "Evdə film bax",
+                "cost": 5,
+                "savings": 45,
+                "health": 2,
+                "family": 3,
+                "work": 0,
+                "social": -13,
+                "message": "Evdə film baxaraq qənaət etdiniz."
+            }
+        ]
+    },
+    {
+        "title": "Telefon problemi",
+        "description": "Telefonunuz qəza keçirdi. Nə etmək istəyirsiniz?",
+        "options": [
+            {
+                "text": "Yeni telefon al",
+                "cost": 300,
+                "savings": 0,
+                "health": 0,
+                "family": -9,
+                "work": 5,
+                "social": 3,
+                "message": "Yeni telefon aldınız. Baha başa gəldi."
+            },
+            {
+                "text": "Təmir etdir",
+                "cost": 120,
+                "savings": 180,
+                "health": 0,
+                "family": 0,
+                "work": 3,
+                "social": -14,
+                "message": "Telefonu təmir etdirdiniz. Qənaət etdiniz."
+            },
+            {
+                "text": "Köhnə telefon istifadə et",
+                "cost": 0,
+                "savings": 300,
+                "health": 0,
+                "family": 3,
+                "work": -12,
+                "social": -7,
+                "message": "Köhnə telefonla davam etdiniz. Çox qənaət etdiniz."
+            }
+        ]
+    },
+    {
+        "title": "Fitness üzvülüyü",
+        "description": "Spor zalı üzvülüyü bitib. Yeniləmək istəyirsiniz?",
+        "options": [
+            {
+                "text": "Premium üzvülük",
+                "cost": 100,
+                "savings": 0,
+                "health": 10,
+                "family": -6,
+                "work": 3,
+                "social": 5,
+                "message": "Premium üzvülük aldınız. Sağlamlıq üçün yaxşı."
+            },
+            {
+                "text": "Standart üzvülük",
+                "cost": 50,
+                "savings": 50,
+                "health": 7,
+                "family": 0,
+                "work": 2,
+                "social": -8,
+                "message": "Standart üzvülük aldınız. Yaxşı seçim."
+            },
+            {
+                "text": "Evdə idman et",
+                "cost": 0,
+                "savings": 100,
+                "health": 5,
+                "family": 2,
+                "work": 0,
+                "social": -9,
+                "message": "Evdə idman etməyə qərar verdiniz."
+            }
+        ]
+    },
+    {
+        "title": "Supermarket alış-verişi",
+        "description": "Həftəlik alış-verişə çıxmalısınız. Haradan alırsınız?",
+        "options": [
+            {
+                "text": "Böyük market",
+                "cost": 120,
+                "savings": 0,
+                "health": -2,
+                "family": 0,
+                "work": -8,
+                "social": 0,
+                "message": "Böyük marketdən hər şeyi aldınız."
+            },
+            {
+                "text": "Lokal marketlər",
+                "cost": 90,
+                "savings": 30,
+                "health": 3,
+                "family": 2,
+                "work": -4,
+                "social": 2,
+                "message": "Lokal marketlərdən alış-veriş etdiniz."
+            },
+            {
+                "text": "Bazar + market",
+                "cost": 70,
+                "savings": 50,
+                "health": 5,
+                "family": 3,
+                "work": -7,
+                "social": 3,
+                "message": "Bazardan təzə tərəvəz aldınız."
+            }
+        ]
+    },
+    {
+        "title": "Kofe alışqanlığı",
+        "description": "Hər gün kofe alırsınız. Bu həftə nə etmək istəyirsiniz?",
+        "options": [
+            {
+                "text": "Kofexanada",
+                "cost": 35,
+                "savings": 0,
+                "health": -5,
+                "family": 0,
+                "work": 3,
+                "social": 3,
+                "message": "Kofexanada kofe içdiniz."
+            },
+            {
+                "text": "Ofisdə pulsuz",
+                "cost": 0,
+                "savings": 35,
+                "health": -5,
+                "family": 0,
+                "work": 2,
+                "social": -5,
+                "message": "Ofisdə pulsuz kofe içdiniz."
+            },
+            {
+                "text": "Evdə hazırla",
+                "cost": 15,
+                "savings": 20,
+                "health": 1,
+                "family": 2,
+                "work": 0,
+                "social": -8,
+                "message": "Evdə kofe hazırladınız."
+            }
+        ]
+    },
+    {
+        "title": "Kitab almaq",
+        "description": "Oxumaq üçün yeni kitab almaq istəyirsiniz.",
+        "options": [
+            {
+                "text": "Yeni kitab",
+                "cost": 25,
+                "savings": 0,
+                "health": 2,
+                "family": 0,
+                "work": 3,
+                "social": -6,
+                "message": "Yeni kitab aldınız."
+            },
+            {
+                "text": "İstifadə olunmuş",
+                "cost": 10,
+                "savings": 15,
+                "health": 2,
+                "family": 0,
+                "work": 2,
+                "social": 0,
+                "message": "İstifadə olunmuş kitab aldınız."
+            },
+            {
+                "text": "Kitabxana",
+                "cost": 0,
+                "savings": 25,
+                "health": 2,
+                "family": 0,
+                "work": -7,
+                "social": 1,
+                "message": "Kitabxanadan kitab götürdünüz."
+            }
+        ]
+    },
+    {
+        "title": "Göz müayinəsi",
+        "description": "Gözləriniz yorulur. Nə etmək istəyirsiniz?",
+        "options": [
+            {
+                "text": "Özəl həkim",
+                "cost": 80,
+                "savings": 0,
+                "health": 8,
+                "family": -8,
+                "work": 3,
+                "social": 0,
+                "message": "Özəl həkimə getdiniz."
+            },
+            {
+                "text": "Dövlət xəstəxanası",
+                "cost": 10,
+                "savings": 70,
+                "health": 6,
+                "family": 0,
+                "work": -6,
+                "social": 0,
+                "message": "Dövlət xəstəxanasına getdiniz."
+            },
+            {
+                "text": "Görməzlikdən gəl",
+                "cost": 0,
+                "savings": 80,
+                "health": -5,
+                "family": -2,
+                "work": -3,
+                "social": 0,
+                "message": "Problemə məhəl qoymadınız."
+            }
+        ]
+    },
+    {
+        "title": "Ailə ziyarəti",
+        "description": "Ailəni ziyarət etmək üçün səfər planlayırsınız.",
+        "options": [
+            {
+                "text": "Təyyarə",
+                "cost": 300,
+                "savings": 0,
+                "health": -1,
+                "family": 8,
+                "work": -8,
+                "social": 0,
+                "message": "Təyyarə ilə tez çatdınız."
+            },
+            {
+                "text": "Avtobus",
+                "cost": 100,
+                "savings": 200,
+                "health": -3,
+                "family": 7,
+                "work": -6,
+                "social": 0,
+                "message": "Avtobusla getdiniz."
+            },
+            {
+                "text": "Ziyarət etmə",
+                "cost": 0,
+                "savings": 300,
+                "health": 0,
+                "family": -10,
+                "work": 2,
+                "social": 0,
+                "message": "Ailəni ziyarət etmədiniz."
+            }
+        ]
+    },
+    {
+        "title": "Doğum günü hədiyyəsi",
+        "description": "Yaxın dostunuzun doğum günü var.",
+        "options": [
+            {
+                "text": "Dəyərli hədiyyə",
+                "cost": 100,
+                "savings": 0,
+                "health": 0,
+                "family": 0,
+                "work": -8,
+                "social": 8,
+                "message": "Dəyərli hədiyyə aldınız."
+            },
+            {
+                "text": "Orta qiymətli",
+                "cost": 40,
+                "savings": 60,
+                "health": 0,
+                "family": 0,
+                "work": 0,
+                "social": -8,
+                "message": "Orta qiymətli hədiyyə aldınız. Sosial ballarınız azaldı."
+            },
+            {
+                "text": "Əl işi hədiyyə",
+                "cost": 15,
+                "savings": 85,
+                "health": 0,
+                "family": 0,
+                "work": -7,
+                "social": 6,
+                "message": "Əl işi hədiyyə hazırladınız."
+            }
+        ]
+    },
+    {
+        "title": "Uşaq bağçası",
+        "description": "Uşağınız üçün bağça seçməlisiniz.",
+        "options": [
+            {
+                "text": "Özəl bağça",
+                "cost": 300,
+                "savings": 0,
+                "health": 5,
+                "family": 5,
+                "work": -7,
+                "social": 3,
+                "message": "Özəl bağça seçdiniz."
+            },
+            {
+                "text": "Dövlət bağçası",
+                "cost": 50,
+                "savings": 250,
+                "health": 3,
+                "family": 3,
+                "work": 0,
+                "social": 1,
+                "message": "Dövlət bağçasına yazdırdınız."
+            },
+            {
+                "text": "Evdə qalsın",
+                "cost": 0,
+                "savings": 300,
+                "health": -2,
+                "family": -5,
+                "work": -5,
+                "social": -3,
+                "message": "Uşaq evdə qaldı."
+            }
+        ]
+    },
+    {
+        "title": "Ailə şousu",
+        "description": "Ailə üzvləri televizor şousu izləmək istəyir.",
+        "options": [
+            {
+                "text": "Kabel TV",
+                "cost": 30,
+                "savings": 0,
+                "health": -1,
+                "family": 5,
+                "work": -1,
+                "social": 0,
+                "message": "Kabel TV aldınız."
+            },
+            {
+                "text": "Streaming xidməti",
+                "cost": 15,
+                "savings": 15,
+                "health": -1,
+                "family": 4,
+                "work": 0,
+                "social": 0,
+                "message": "Streaming xidməti aldınız."
+            },
+            {
+                "text": "Pulsuz kanallar",
+                "cost": 0,
+                "savings": 30,
+                "health": -1,
+                "family": 2,
+                "work": 0,
+                "social": 0,
+                "message": "Pulsuz kanallarla kifayətləndiniz."
+            }
+        ]
+    },
+    {
+        "title": "Ev heyvanı",
+        "description": "Ailə heyvan saxlamaq istəyir.",
+        "options": [
+            {
+                "text": "Əncir iti",
+                "cost": 200,
+                "savings": 0,
+                "health": 5,
+                "family": 8,
+                "work": -2,
+                "social": 3,
+                "message": "Əncir iti aldınız."
+            },
+            {
+                "text": "Müştəri pişiyi",
+                "cost": 50,
+                "savings": 150,
+                "health": 4,
+                "family": 6,
+                "work": -1,
+                "social": 2,
+                "message": "Pişik aldınız."
+            },
+            {
+                "text": "Balıq",
+                "cost": 30,
+                "savings": 170,
+                "health": 2,
+                "family": 3,
+                "work": 0,
+                "social": 1,
+                "message": "Balıq aldınız."
+            }
+        ]
+    },
+    {
+        "title": "Ailə fotosu",
+        "description": "Ailə fotosu çəkdirmək istəyirsiniz.",
+        "options": [
+            {
+                "text": "Professional fotoqraf",
+                "cost": 150,
+                "savings": 0,
+                "health": 0,
+                "family": 7,
+                "work": -1,
+                "social": 5,
+                "message": "Professional fotoqraf işə götürdünüz."
+            },
+            {
+                "text": "Yeni başlayan fotoqraf",
+                "cost": 60,
+                "savings": 90,
+                "health": 0,
+                "family": 5,
+                "work": 0,
+                "social": 3,
+                "message": "Yeni başlayan fotoqraf tapdınız."
+            },
+            {
+                "text": "Özünüz çəkin",
+                "cost": 0,
+                "savings": 150,
+                "health": 0,
+                "family": 3,
+                "work": 0,
+                "social": 1,
+                "message": "Özünüz foto çəkdirdiniz."
+            }
+        ]
+    },
+    {
+        "title": "Valideynlərə kömək",
+        "description": "Valideynləriniz maliyyə köməyinə ehtiyac duyur.",
+        "options": [
+            {
+                "text": "Tam kömək",
+                "cost": 300,
+                "savings": 0,
+                "health": 0,
+                "family": 10,
+                "work": -3,
+                "social": -1,
+                "message": "Valideynlərinizə tam kömək etdiniz."
+            },
+            {
+                "text": "Yarımkömək",
+                "cost": 150,
+                "savings": 150,
+                "health": 0,
+                "family": 7,
+                "work": -1,
+                "social": 0,
+                "message": "Yarımkömək etdiniz."
+            },
+            {
+                "text": "Kömək etmə",
+                "cost": 0,
+                "savings": 300,
+                "health": 0,
+                "family": -10,
+                "work": 2,
+                "social": 0,
+                "message": "Kömək etmədiniz."
+            }
+        ]
+    },
+    {
+        "title": "Qohum toyu",
+        "description": "Qohumunuzun toyuna dəvət aldınız.",
+        "options": [
+            {
+                "text": "Dəyərli hədiyyə",
+                "cost": 200,
+                "savings": 0,
+                "health": 0,
+                "family": 8,
+                "work": -1,
+                "social": 5,
+                "message": "Dəyərli hədiyyə aldınız."
+            },
+            {
+                "text": "Standart hədiyyə",
+                "cost": 80,
+                "savings": 120,
+                "health": 0,
+                "family": 5,
+                "work": 0,
+                "social": 3,
+                "message": "Standart hədiyyə aldınız."
+            },
+            {
+                "text": "Toyda iştirak etmə",
+                "cost": 0,
+                "savings": 200,
+                "health": 0,
+                "family": -8,
+                "work": 2,
+                "social": -5,
+                "message": "Toyda iştirak etmədiniz."
+            }
+        ]
+    },
+    {
+        "title": "Ailə istirahəti",
+        "description": "Ailə ilə həftəsonu istirahət planlayırsınız.",
+        "options": [
+            {
+                "text": "Kurort oteli",
+                "cost": 300,
+                "savings": 0,
+                "health": 5,
+                "family": 8,
+                "work": -1,
+                "social": 5,
+                "message": "Kurort otelində qaldınız."
+            },
+            {
+                "text": "Kirayə ev",
+                "cost": 150,
+                "savings": 150,
+                "health": 4,
+                "family": 6,
+                "work": 0,
+                "social": 3,
+                "message": "Kirayə evdə qaldınız."
+            },
+            {
+                "text": "Günüboluş yeri",
+                "cost": 50,
+                "savings": 250,
+                "health": 3,
+                "family": 4,
+                "work": 0,
+                "social": -2,
+                "message": "Günüboluş yerinə getdiniz."
+            }
+        ]
+    },
+    {
+        "title": "Uşağın təhsili",
+        "description": "Uşağınızın əlavə dərslərə ehtiyacı var.",
+        "options": [
+            {
+                "text": "Özəl müəllim",
+                "cost": 200,
+                "savings": 0,
+                "health": 0,
+                "family": 5,
+                "work": -2,
+                "social": 0,
+                "message": "Özəl müəllim tutdunuz."
+            },
+            {
+                "text": "Qrup dərsləri",
+                "cost": 80,
+                "savings": 120,
+                "health": 0,
+                "family": 3,
+                "work": 0,
+                "social": -1,
+                "message": "Qrup dərslərinə yazdırdınız."
+            },
+            {
+                "text": "Özünüz öyrədin",
+                "cost": 0,
+                "savings": 200,
+                "health": 0,
+                "family": 1,
+                "work": -3,
+                "social": 0,
+                "message": "Özünüz öyrətməyə çalışdınız."
+            }
+        ]
+    },
+    {
+        "title": "İş geyimi",
+        "description": "Mühüm iş görüşünüz var. Geyim seçməlisiniz.",
+        "options": [
+            {
+                "text": "Dizayner kostyum",
+                "cost": 300,
+                "savings": 0,
+                "health": 0,
+                "family": -3,
+                "work": 10,
+                "social": 5,
+                "message": "Dizayner kostyum aldınız."
+            },
+            {
+                "text": "Orta qiymətli",
+                "cost": 200,
+                "savings": 100,
+                "health": 0,
+                "family": 0,
+                "work": 7,
+                "social": 3,
+                "message": "Orta qiymətli kostyum aldınız."
+            },
+            {
+                "text": "Mövcud geyim",
+                "cost": 0,
+                "savings": 300,
+                "health": 0,
+                "family": 0,
+                "work": 3,
+                "social": 0,
+                "message": "Mövcud geyiminizi geyindiniz."
+            }
+        ]
+    },
+    {
+        "title": "İş laptopu",
+        "description": "İş üçün yeni laptop lazımdır.",
+        "options": [
+            {
+                "text": "Ən yeni model",
+                "cost": 300,
+                "savings": 0,
+                "health": 0,
+                "family": -5,
+                "work": 8,
+                "social": 0,
+                "message": "Ən yeni laptopu aldınız."
+            },
+            {
+                "text": "Orta səviyyəli",
+                "cost": 200,
+                "savings": 100,
+                "health": 0,
+                "family": 0,
+                "work": 6,
+                "social": 0,
+                "message": "Orta səviyyəli laptop aldınız."
+            },
+            {
+                "text": "İstifadə olunmuş",
+                "cost": 50,
+                "savings": 250,
+                "health": 0,
+                "family": 2,
+                "work": 4,
+                "social": 0,
+                "message": "İstifadə olunmuş laptop aldınız."
+            }
+        ]
+    },
+    {
+        "title": "İşdə nahar",
+        "description": "İşdə nahar etmək üçün seçim etməlisiniz.",
+        "options": [
+            {
+                "text": "Restoran",
+                "cost": 20,
+                "savings": 0,
+                "health": -2,
+                "family": -1,
+                "work": 3,
+                "social": 5,
+                "message": "Hər gün restoranda yemək yediniz."
+            },
+            {
+                "text": "Ofis yeməkxanası",
+                "cost": 8,
+                "savings": 12,
+                "health": -1,
+                "family": 0,
+                "work": 2,
+                "social": 3,
+                "message": "Ofis yeməkxanasında yemək yediniz."
+            },
+            {
+                "text": "Evdən gətir",
+                "cost": 4,
+                "savings": 16,
+                "health": 3,
+                "family": 2,
+                "work": 0,
+                "social": 0,
+                "message": "Evdən yemək gətirdiniz."
+            }
+        ]
+    },
+    {
+        "title": "Peşəkar təlim",
+        "description": "Karyeranızı inkişaf etdirmək üçün təlimə ehtiyac var.",
+        "options": [
+            {
+                "text": "Beynəlxalq sertifikat",
+                "cost": 300,
+                "savings": 0,
+                "health": 0,
+                "family": -3,
+                "work": 10,
+                "social": 0,
+                "message": "Beynəlxalq sertifikat aldınız."
+            },
+            {
+                "text": "Yerli təlim",
+                "cost": 150,
+                "savings": 150,
+                "health": 0,
+                "family": 0,
+                "work": 6,
+                "social": -1,
+                "message": "Yerli təlimə qatıldınız."
+            },
+            {
+                "text": "Onlayn pulsuz",
+                "cost": 0,
+                "savings": 300,
+                "health": 0,
+                "family": 2,
+                "work": 3,
+                "social": 0,
+                "message": "Pulsuz onlayn təlim aldınız."
+            }
+        ]
+    },
+    {
+        "title": "İş yoldaşı ilə münasibət",
+        "description": "İş yoldaşınızın doğum günü var.",
+        "options": [
+            {
+                "text": "Böyük hədiyyə",
+                "cost": 80,
+                "savings": 0,
+                "health": -1,
+                "family": 0,
+                "work": 5,
+                "social": 5,
+                "message": "Böyük hədiyyə aldınız."
+            },
+            {
+                "text": "Kiçik hədiyyə",
+                "cost": 20,
+                "savings": 60,
+                "health": 0,
+                "family": 0,
+                "work": 3,
+                "social": 3,
+                "message": "Kiçik hədiyyə aldınız."
+            },
+            {
+                "text": "Təbrik etmə",
+                "cost": 0,
+                "savings": 80,
+                "health": 0,
+                "family": 0,
+                "work": -3,
+                "social": -5,
+                "message": "Doğum gününü qeyd etmədiniz."
+            }
+        ]
+    },
+    {
+        "title": "İşə gediş-gəliş",
+        "description": "İşə daha sürətli çatmaq üçün nəqliyyat seçin.",
+        "options": [
+            {
+                "text": "Öz maşın",
+                "cost": 200,
+                "savings": 0,
+                "health": -1,
+                "family": 2,
+                "work": 5,
+                "social": 0,
+                "message": "Öz maşınınızla getdiniz."
+            },
+            {
+                "text": "Karpulinq",
+                "cost": 80,
+                "savings": 120,
+                "health": 0,
+                "family": 1,
+                "work": 3,
+                "social": 2,
+                "message": "Karpulinq etdiniz."
+            },
+            {
+                "text": "İctimai nəqliyyat",
+                "cost": 30,
+                "savings": 170,
+                "health": 1,
+                "family": -1,
+                "work": 1,
+                "social": 1,
+                "message": "İctimai nəqliyyat istifadə etdiniz."
+            }
+        ]
+    },
+    {
+        "title": "İş güzəşti",
+        "description": "Şirkət sizə maşın və ya pul təklif edir.",
+        "options": [
+            {
+                "text": "Şirkət maşını",
+                "cost": 0,
+                "savings": 0,
+                "health": -1,
+                "family": 3,
+                "work": 5,
+                "social": 3,
+                "message": "Şirkət maşını seçdiniz."
+            },
+            {
+                "text": "Əlavə maaş",
+                "cost": 0,
+                "savings": 300,
+                "health": 0,
+                "family": 5,
+                "work": 3,
+                "social": 0,
+                "message": "Əlavə maaş seçdiniz."
+            },
+            {
+                "text": "Əlavə məzuniyyət",
+                "cost": 0,
+                "savings": 0,
+                "health": 5,
+                "family": 8,
+                "work": -2,
+                "social": 5,
+                "message": "Əlavə məzuniyyət seçdiniz."
+            }
+        ]
+    },
+    {
+        "title": "Ofis avadanlığı",
+        "description": "Ev ofisi üçün stul almaq lazımdır.",
+        "options": [
+            {
+                "text": "Ergonomik stul",
+                "cost": 300,
+                "savings": 0,
+                "health": 8,
+                "family": -2,
+                "work": 5,
+                "social": 0,
+                "message": "Ergonomik stul aldınız."
+            },
+            {
+                "text": "Normal ofis stulu",
+                "cost": 150,
+                "savings": 150,
+                "health": 3,
+                "family": 0,
+                "work": 3,
+                "social": 0,
+                "message": "Normal ofis stulu aldınız."
+            },
+            {
+                "text": "Ev stulu",
+                "cost": 0,
+                "savings": 300,
+                "health": -5,
+                "family": 0,
+                "work": -2,
+                "social": 0,
+                "message": "Mövcud stulunuzu istifadə etdiniz."
+            }
+        ]
+    },
+    {
+        "title": "İş telefonu",
+        "description": "İş üçün yeni telefon lazımdır.",
+        "options": [
+            {
+                "text": "Ən son model",
+                "cost": 300,
+                "savings": 0,
+                "health": 0,
+                "family": -3,
+                "work": 7,
+                "social": 3,
+                "message": "Ən son model telefon aldınız."
+            },
+            {
+                "text": "Orta səviyyəli",
+                "cost": 200,
+                "savings": 100,
+                "health": 0,
+                "family": 0,
+                "work": 5,
+                "social": 1,
+                "message": "Orta səviyyəli telefon aldınız."
+            },
+            {
+                "text": "Əsas funksiyalı",
+                "cost": 50,
+                "savings": 250,
+                "health": 0,
+                "family": 2,
+                "work": 3,
+                "social": -1,
+                "message": "Əsas funksiyalı telefon aldınız."
+            }
+        ]
+    },
+    {
+        "title": "İş səfəri",
+        "description": "İş səfərinə çıxmalısınız.",
+        "options": [
+            {
+                "text": "5 ulduzlu otel",
+                "cost": 300,
+                "savings": 0,
+                "health": 3,
+                "family": -1,
+                "work": 5,
+                "social": 3,
+                "message": "5 ulduzlu oteldə qaldınız."
+            },
+            {
+                "text": "3 ulduzlu otel",
+                "cost": 150,
+                "savings": 150,
+                "health": 1,
+                "family": 0,
+                "work": 3,
+                "social": 1,
+                "message": "3 ulduzlu oteldə qaldınız."
+            },
+            {
+                "text": "İşgüzar qonaq evi",
+                "cost": 80,
+                "savings": 220,
+                "health": -1,
+                "family": 0,
+                "work": 2,
+                "social": 0,
+                "message": "İşgüzar qonaq evində qaldınız."
+            }
+        ]
+    },
+    {
+        "title": "Diş həkimi",
+        "description": "Diş ağrınız var. Həkim seçməlisiniz.",
+        "options": [
+            {
+                "text": "Özəl klinika",
+                "cost": 200,
+                "savings": 0,
+                "health": 8,
+                "family": 0,
+                "work": 0,
+                "social": -1,
+                "message": "Özəl klinikada müalicə oldunuz."
+            },
+            {
+                "text": "Dövlət klinikası",
+                "cost": 20,
+                "savings": 180,
+                "health": 6,
+                "family": 0,
+                "work": -2,
+                "social": 0,
+                "message": "Dövlət klinikasında növbə gözlədiniz."
+            },
+            {
+                "text": "Ev üsulu",
+                "cost": 5,
+                "savings": 195,
+                "health": -3,
+                "family": 0,
+                "work": 0,
+                "social": 0,
+                "message": "Ev üsulu ilə müalicə etməyə çalışdınız."
+            }
+        ]
+    },
+    {
+        "title": "Dərman almaq",
+        "description": "Həkim dərman yazıb. Haradan alırsınız?",
+        "options": [
+            {
+                "text": "Özəl aptek",
+                "cost": 50,
+                "savings": 0,
+                "health": 5,
+                "family": 0,
+                "work": 0,
+                "social": -1,
+                "message": "Özəl aptekdən dərman aldınız."
+            },
+            {
+                "text": "Dövlət apteki",
+                "cost": 10,
+                "savings": 40,
+                "health": 4,
+                "family": 0,
+                "work": -1,
+                "social": 0,
+                "message": "Dövlət aptekində növbə gözlədiniz."
+            },
+            {
+                "text": "Dərman almadan",
+                "cost": 0,
+                "savings": 50,
+                "health": -5,
+                "family": 0,
+                "work": 0,
+                "social": 0,
+                "message": "Dərman almadan davam etdiniz."
+            }
+        ]
+    },
+    {
+        "title": "Ev təmiri",
+        "description": "Mənzilinizdə su sızması var. Nə edirsiniz?",
+        "options": [
+            {
+                "text": "Professional ustalar",
+                "cost": 300,
+                "savings": 0,
+                "health": 0,
+                "family": 3,
+                "work": -1,
+                "social": 0,
+                "message": "Professional ustalar işi həll etdi."
+            },
+            {
+                "text": "Tanış usta",
+                "cost": 150,
+                "savings": 150,
+                "health": 0,
+                "family": 2,
+                "work": 0,
+                "social": 1,
+                "message": "Tanış usta işi həll etdi."
+            },
+            {
+                "text": "Özünüz təmir edin",
+                "cost": 50,
+                "savings": 250,
+                "health": -2,
+                "family": 0,
+                "work": -2,
+                "social": 0,
+                "message": "Özünüz təmir etməyə çalışdınız."
+            }
+        ]
+    },
+    {
+        "title": "Maşın təmiri",
+        "description": "Maşınınız xarab oldu. Təmir etdirmək istəyirsiniz?",
+        "options": [
+            {
+                "text": "Rəsmi servis",
+                "cost": 300,
+                "savings": 0,
+                "health": 0,
+                "family": -2,
+                "work": 3,
+                "social": 0,
+                "message": "Rəsmi servisdə təmir etdirdiniz."
+            },
+            {
+                "text": "Yerli ustaxana",
+                "cost": 150,
+                "savings": 150,
+                "health": 0,
+                "family": 0,
+                "work": 1,
+                "social": 0,
+                "message": "Yerli ustaxanada təmir etdirdiniz."
+            },
+            {
+                "text": "Təmir etdirmə",
+                "cost": 0,
+                "savings": 300,
+                "health": 0,
+                "family": -2,
+                "work": -5,
+                "social": 0,
+                "message": "Maşını təmir etdirmədiniz."
+            }
+        ]
+    },
+    {
+        "title": "Kompüter təmiri",
+        "description": "Kompüteriniz işləmir. Nə etmək istəyirsiniz?",
+        "options": [
+            {
+                "text": "Rəsmi servis",
+                "cost": 150,
+                "savings": 0,
+                "health": 0,
+                "family": -1,
+                "work": 5,
+                "social": 0,
+                "message": "Rəsmi servisdə təmir etdirdiniz."
+            },
+            {
+                "text": "Təcrübəli dost",
+                "cost": 50,
+                "savings": 100,
+                "health": 0,
+                "family": 1,
+                "work": 3,
+                "social": 1,
+                "message": "Dostunuz təmir etdi."
+            },
+            {
+                "text": "Özünüz təmir edin",
+                "cost": 20,
+                "savings": 130,
+                "health": 0,
+                "family": 0,
+                "work": -2,
+                "social": 0,
+                "message": "Özünüz təmir etməyə çalışdınız."
+            }
+        ]
+    },
+    {
+        "title": "Mebel almaq",
+        "description": "Ev üçün yeni divan almaq istəyirsiniz.",
+        "options": [
+            {
+                "text": "Dizayner mebel",
+                "cost": 300,
+                "savings": 0,
+                "health": 3,
+                "family": 5,
+                "work": -1,
+                "social": 5,
+                "message": "Dizayner mebel aldınız."
+            },
+            {
+                "text": "Orta qiymətli",
+                "cost": 150,
+                "savings": 150,
+                "health": 2,
+                "family": 3,
+                "work": 0,
+                "social": 2,
+                "message": "Orta qiymətli mebel aldınız."
+            },
+            {
+                "text": "İstifadə olunmuş",
+                "cost": 50,
+                "savings": 250,
+                "health": 1,
+                "family": 1,
+                "work": 0,
+                "social": 0,
+                "message": "İstifadə olunmuş mebel aldınız."
+            }
+        ]
+    },
+    {
+        "title": "Ev texnikası",
+        "description": "Paltaryuyan maşın xarab oldu. Nə edirsiniz?",
+        "options": [
+            {
+                "text": "Yeni maşın al",
+                "cost": 300,
+                "savings": 0,
+                "health": 0,
+                "family": 3,
+                "work": -1,
+                "social": 0,
+                "message": "Yeni paltaryuyan maşın aldınız."
+            },
+            {
+                "text": "Təmir etdir",
+                "cost": 120,
+                "savings": 180,
+                "health": 0,
+                "family": 1,
+                "work": 0,
+                "social": 0,
+                "message": "Paltaryuyan maşını təmir etdirdiniz."
+            },
+            {
+                "text": "Əl ilə yuyun",
+                "cost": 0,
+                "savings": 300,
+                "health": -3,
+                "family": -3,
+                "work": -2,
+                "social": 0,
+                "message": "Əl ilə paltar yumağa başladınız."
+            }
+        ]
+    },
+    {
+        "title": "Sığorta seçimi",
+        "description": "Maşın sığortası üçün seçim etməlisiniz.",
+        "options": [
+            {
+                "text": "Tam sığorta",
+                "cost": 300,
+                "savings": 0,
+                "health": 0,
+                "family": 3,
+                "work": -1,
+                "social": 0,
+                "message": "Tam sığorta etdirdiniz."
+            },
+            {
+                "text": "Standart sığorta",
+                "cost": 150,
+                "savings": 150,
+                "health": 0,
+                "family": 1,
+                "work": 0,
+                "social": 0,
+                "message": "Standart sığorta etdirdiniz."
+            },
+            {
+                "text": "Sığorta etdirmə",
+                "cost": 0,
+                "savings": 300,
+                "health": 0,
+                "family": -5,
+                "work": 0,
+                "social": 0,
+                "message": "Sığorta etdirmədiniz."
+            }
+        ]
+    },
+    {
+        "title": "Təcili yardım",
+        "description": "Ailə üzvü xəstələnib. Nə etmək istəyirsiniz?",
+        "options": [
+            {
+                "text": "Özəl xəstəxana",
+                "cost": 300,
+                "savings": 0,
+                "health": 8,
+                "family": 5,
+                "work": -2,
+                "social": 0,
+                "message": "Özəl xəstəxanaya getdiniz."
+            },
+            {
+                "text": "Dövlət xəstəxanası",
+                "cost": 20,
+                "savings": 280,
+                "health": 6,
+                "family": 3,
+                "work": -3,
+                "social": 0,
+                "message": "Dövlət xəstəxanasında növbə gözlədiniz."
+            },
+            {
+                "text": "Evdə müalicə",
+                "cost": 50,
+                "savings": 250,
+                "health": 3,
+                "family": 0,
+                "work": 0,
+                "social": 0,
+                "message": "Evdə müalicə etməyə çalışdınız."
+            }
+        ]
+    },
+    {
+        "title": "Ağız sağlamlığı",
+        "description": "Dişlərinizə qulluq üçün seçim etməlisiniz.",
+        "options": [
+            {
+                "text": "Özəl diş həkimi",
+                "cost": 150,
+                "savings": 0,
+                "health": 7,
+                "family": 0,
+                "work": 0,
+                "social": -2,
+                "message": "Özəl diş həkiminə getdiniz."
+            },
+            {
+                "text": "Dövlət diş həkimi",
+                "cost": 30,
+                "savings": 120,
+                "health": 5,
+                "family": 0,
+                "work": -1,
+                "social": 0,
+                "message": "Dövlət diş həkiminə getdiniz."
+            },
+            {
+                "text": "Ev qulluğu",
+                "cost": 10,
+                "savings": 140,
+                "health": 2,
+                "family": 0,
+                "work": 0,
+                "social": -1,
+                "message": "Evdə diş qulluğu ilə kifayətləndiniz."
+            }
+        ]
+    }
+];
+
+    // 150 sualı qaytarırıq
+    return questions.slice(0, count);
+}
+
+        // Təsadüfi effekt yaratmaq üçün köməkçi funksiya
+        function getRandomEffect(range) {
+            return Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
+        }
+
+        // Yerli saxlama məlumatlarını yükləmək
+        function loadData() {
+            const savedGoals = localStorage.getItem('userGoals');
+            if (savedGoals) {
+                userGoals = JSON.parse(savedGoals);
+                updateGoalsList();
+                if (userGoals.length > 0) {
+                    activeGoalIndex = 0;
+                    updateGoalUI();
+                }
+            }
+            
+            const savedExpenses = localStorage.getItem('userExpenses');
+            if (savedExpenses) {
+                expenses = JSON.parse(savedExpenses);
+                updateExpenseList();
+                updateExpenseChart();
+                updateAIRecommendations();
+            }
+        }
+
+        // Məqsədi təyin etmək
+        setGoalBtn.addEventListener('click', function() {
+            const name = goalNameInput.value.trim();
+            const amount = parseFloat(goalAmountInput.value);
+            const date = goalDateInput.value;
+            
+            if (!name || !amount || !date) {
+                showNotification('Zəhmət olmasa bütün məlumatları doldurun.', true);
+                return;
+            }
+            
+            if (amount <= 0) {
+                showNotification('Məqsəd məbləği müsbət olmalıdır.', true);
+                return;
+            }
+            
+            // 21 rəqəm məhdudiyyətini yoxlamaq
+            if (amount.toString().length > 21) {
+                showNotification('Məbləğ 21 rəqəmdən çox ola bilməz.', true);
+                return;
+            }
+            
+            const today = new Date();
+            const goalDate = new Date(date);
+            
+            if (goalDate <= today) {
+                showNotification('Məqsəd tarixi gələcək bir tarix olmalıdır.', true);
+                return;
+            }
+            
+            const newGoal = {
+                id: Date.now(),
+                name: name,
+                amount: amount,
+                date: date,
+                saved: 0,
+                completed: false
+            };
+            
+            userGoals.push(newGoal);
+            localStorage.setItem('userGoals', JSON.stringify(userGoals));
+            
+            if (userGoals.length === 1) {
+                activeGoalIndex = 0;
+                updateGoalUI();
+            }
+            
+            updateGoalsList();
+            
+            goalNameInput.value = '';
+            goalAmountInput.value = '';
+            goalDateInput.value = '';
+            
+            showNotification('Məqsədiniz uğurla təyin edildi!');
+        });
+
+        // Məqsədlər siyahısını yeniləmək
+        function updateGoalsList() {
+            goalsContainer.innerHTML = '';
+            
+            if (userGoals.length === 0) {
+                goalsContainer.innerHTML = '<p style="text-align: center; color: var(--gray);">Hələlik heç bir məqsəd təyin edilməyib.</p>';
+                return;
+            }
+            
+            userGoals.forEach((goal, index) => {
+                const goalItem = document.createElement('div');
+                goalItem.className = 'goal-item';
+                
+                const progressPercent = (goal.saved / goal.amount) * 100;
+                const today = new Date();
+                const goalDate = new Date(goal.date);
+                const timeDiff = goalDate.getTime() - today.getTime();
+                const daysLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                
+                goalItem.innerHTML = `
+                    <div class="goal-info">
+                        <div class="goal-name">${goal.name}</div>
+                        <div class="goal-details">
+                            <span>Hədəf: ${goal.amount} AZN</span>
+                            <span>Qalan gün: ${daysLeft}</span>
+                            <span>Qənaət: ${goal.saved} AZN</span>
+                        </div>
+                    </div>
+                    <div class="goal-progress">
+                        <div class="progress-bar" style="height: 12px;">
+                            <div class="progress" style="width: ${Math.min(progressPercent, 100)}%;"></div>
+                        </div>
+                        <div style="font-size: 0.8rem; text-align: center; margin-top: 5px;">${Math.min(progressPercent, 100).toFixed(1)}%</div>
+                    </div>
+                    <div class="goal-actions">
+                        <button class="goal-btn edit" data-id="${goal.id}">Düzəlt</button>
+                        <button class="goal-btn delete" data-id="${goal.id}">Sil</button>
+                        ${index === activeGoalIndex ? '<button class="goal-btn complete" style="background-color: var(--success); color: white;" disabled>Aktiv</button>' : `<button class="goal-btn complete" data-id="${goal.id}">Aktiv Et</button>`}
+                    </div>
+                `;
+                
+                goalsContainer.appendChild(goalItem);
+            });
+            
+            // Düymə hadisələrini əlavə etmək
+            document.querySelectorAll('.goal-btn.edit').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const goalId = parseInt(this.getAttribute('data-id'));
+                    editGoal(goalId);
+                });
+            });
+            
+            document.querySelectorAll('.goal-btn.delete').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const goalId = parseInt(this.getAttribute('data-id'));
+                    deleteGoal(goalId);
+                });
+            });
+            
+            document.querySelectorAll('.goal-btn.complete:not([disabled])').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const goalId = parseInt(this.getAttribute('data-id'));
+                    setActiveGoal(goalId);
+                });
+            });
+        }
+
+        // Məqsədi redaktə etmək
+        function editGoal(goalId) {
+            const goalIndex = userGoals.findIndex(g => g.id === goalId);
+            if (goalIndex === -1) return;
+            
+            const goal = userGoals[goalIndex];
+            
+            goalNameInput.value = goal.name;
+            goalAmountInput.value = goal.amount;
+            goalDateInput.value = goal.date;
+            
+            // Mövcud məqsədi silmək
+            userGoals.splice(goalIndex, 1);
+            localStorage.setItem('userGoals', JSON.stringify(userGoals));
+            
+            updateGoalsList();
+            showNotification('Məqsəd redaktə üçün hazırdır. Yeni məlumatları daxil edin və "Məqsədi Təyin Et" düyməsini klikləyin.');
+        }
+
+        // Məqsədi silmək
+        function deleteGoal(goalId) {
+            if (!confirm('Bu məqsədi silmək istədiyinizə əminsiniz?')) return;
+            
+            const goalIndex = userGoals.findIndex(g => g.id === goalId);
+            if (goalIndex === -1) return;
+            
+            userGoals.splice(goalIndex, 1);
+            localStorage.setItem('userGoals', JSON.stringify(userGoals));
+            
+            if (activeGoalIndex === goalIndex) {
+                activeGoalIndex = userGoals.length > 0 ? 0 : -1;
+                updateGoalUI();
+            } else if (activeGoalIndex > goalIndex) {
+                activeGoalIndex--;
+            }
+            
+            updateGoalsList();
+            showNotification('Məqsəd silindi!');
+        }
+
+        // Aktiv məqsədi təyin etmək
+        function setActiveGoal(goalId) {
+            const goalIndex = userGoals.findIndex(g => g.id === goalId);
+            if (goalIndex === -1) return;
+            
+            activeGoalIndex = goalIndex;
+            updateGoalUI();
+            updateGoalsList();
+            showNotification('Aktiv məqsəd dəyişdirildi!');
+        }
+
+        // Gündəlik qənaəti əlavə etmək
+        addSavingBtn.addEventListener('click', function() {
+            if (userGoals.length === 0) {
+                showNotification('Əvvəlcə məqsəd təyin edin.', true);
+                return;
+            }
+            
+            const activeGoal = userGoals[activeGoalIndex];
+            
+            if (activeGoal.completed) {
+                showNotification('Bu məqsəd artıq tamamlanıb! Başqa məqsəd seçin.', true);
+                return;
+            }
+            
+            const saving = parseFloat(dailySavingInput.value);
+            
+            if (!saving || saving <= 0) {
+                showNotification('Zəhmət olmasa keçərli bir məbləğ daxil edin.', true);
+                return;
+            }
+            
+            // 21 rəqəm məhdudiyyətini yoxlamaq
+            if (saving.toString().length > 21) {
+                showNotification('Məbləğ 21 rəqəmdən çox ola bilməz.', true);
+                return;
+            }
+            
+            activeGoal.saved += saving;
+            
+            // Məqsədə çatılıb çatılmadığını yoxlamaq
+            if (activeGoal.saved >= activeGoal.amount) {
+                activeGoal.completed = true;
+                activeGoal.saved = activeGoal.amount;
+                showNotification('Təbriklər! Məqsədinizə çatdınız!');
+            } else {
+                showNotification(`${saving} AZN qənaət etdiniz.`);
+            }
+            
+            localStorage.setItem('userGoals', JSON.stringify(userGoals));
+            
+            dailySavingInput.value = '';
+            updateGoalUI();
+            updateGoalsList();
+        });
+
+        // Aktiv məqsədi sıfırlamaq
+        resetActiveGoalBtn.addEventListener('click', function() {
+            if (userGoals.length === 0 || activeGoalIndex < 0) {
+                showNotification('Aktiv məqsəd yoxdur.', true);
+                return;
+            }
+            
+            if (confirm('Aktiv məqsədin qənaətini sıfırlamaq istədiyinizə əminsiniz?')) {
+                userGoals[activeGoalIndex].saved = 0;
+                userGoals[activeGoalIndex].completed = false;
+                localStorage.setItem('userGoals', JSON.stringify(userGoals));
+                updateGoalUI();
+                updateGoalsList();
+                showNotification('Aktiv məqsəd sıfırlandı!');
+            }
+        });
+
+        // Bütün tərəqqini sıfırlamaq
+        resetProgressBtn.addEventListener('click', function() {
+            if (confirm('Bütün məqsədlərinizi sıfırlamaq istədiyinizə əminsiniz? Bu əməliyyat geri alına bilməz.')) {
+                userGoals.forEach(goal => {
+                    goal.saved = 0;
+                    goal.completed = false;
+                });
+                localStorage.setItem('userGoals', JSON.stringify(userGoals));
+                updateGoalUI();
+                updateGoalsList();
+                showNotification('Bütün məqsədlər sıfırlandı!');
+            }
+        });
+
+        // Məqsəd UI-ni yeniləmək
+        function updateGoalUI() {
+            if (userGoals.length > 0 && activeGoalIndex >= 0) {
+                const activeGoal = userGoals[activeGoalIndex];
+                
+                // Məqsəd məlumatlarını göstərmək
+                currentGoalNameEl.textContent = activeGoal.name;
+                currentGoalAmountEl.textContent = activeGoal.amount.toFixed(2);
+                
+                // Tərəqqi çubuğunu yeniləmək
+                const progressPercent = (activeGoal.saved / activeGoal.amount) * 100;
+                goalProgress.style.width = `${Math.min(progressPercent, 100)}%`;
+                
+                // Məbləğləri yeniləmək
+                savedAmountEl.textContent = `${activeGoal.saved.toFixed(2)} AZN`;
+                goalTargetEl.textContent = `${activeGoal.amount.toFixed(2)} AZN`;
+                totalSavedEl.textContent = `${activeGoal.saved.toFixed(2)} AZN`;
+                
+                // Tamamlanma faizini yeniləmək
+                completionPercentEl.textContent = `${Math.min(progressPercent, 100).toFixed(1)}%`;
+                
+                // Qalan günləri hesablamaq
+                const today = new Date();
+                const goalDate = new Date(activeGoal.date);
+                const timeDiff = goalDate.getTime() - today.getTime();
+                const daysLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                daysLeftEl.textContent = daysLeft;
+                
+                // Gündəlik hədəfi hesablamaq
+                const remainingAmount = activeGoal.amount - activeGoal.saved;
+                const dailyTarget = remainingAmount / Math.max(daysLeft, 1);
+                dailyTargetEl.textContent = `${dailyTarget.toFixed(2)} AZN`;
+                
+                // Məqsəd tamamlandıqda
+                if (activeGoal.completed) {
+                    goalCompletedMessage.style.display = 'flex';
+                    addSavingBtn.classList.add('btn-disabled');
+                    addSavingBtn.disabled = true;
+                } else {
+                    goalCompletedMessage.style.display = 'none';
+                    addSavingBtn.classList.remove('btn-disabled');
+                    addSavingBtn.disabled = false;
+                }
+            } else {
+                // Heç bir məqsəd yoxdursa
+                currentGoalNameEl.textContent = 'Yoxdur';
+                currentGoalAmountEl.textContent = '0';
+                goalProgress.style.width = '0%';
+                savedAmountEl.textContent = '0 AZN';
+                goalTargetEl.textContent = '0 AZN';
+                totalSavedEl.textContent = '0 AZN';
+                completionPercentEl.textContent = '0%';
+                daysLeftEl.textContent = '0';
+                dailyTargetEl.textContent = '0 AZN';
+                goalCompletedMessage.style.display = 'none';
+                addSavingBtn.classList.remove('btn-disabled');
+                addSavingBtn.disabled = false;
+            }
+        }
+
+        // Xərc əlavə etmək
+        addExpenseBtn.addEventListener('click', function() {
+            const name = expenseNameInput.value.trim();
+            const amount = parseFloat(expenseAmountInput.value);
+            const category = expenseCategoryInput.value;
+            
+            if (!name || !amount || amount <= 0) {
+                showNotification('Zəhmət olmasa keçərli məlumatlar daxil edin.', true);
+                return;
+            }
+            
+            // 21 rəqəm məhdudiyyətini yoxlamaq
+            if (amount.toString().length > 21) {
+                showNotification('Məbləğ 21 rəqəmdən çox ola bilməz.', true);
+                return;
+            }
+            
+            const expense = {
+                id: Date.now(),
+                name: name,
+                amount: amount,
+                category: category,
+                date: new Date().toLocaleDateString('az-AZ')
+            };
+            
+            expenses.push(expense);
+            localStorage.setItem('userExpenses', JSON.stringify(expenses));
+            
+            expenseNameInput.value = '';
+            expenseAmountInput.value = '';
+            
+            updateExpenseList();
+            updateExpenseChart();
+            updateAIRecommendations();
+            showNotification('Xərc uğurla əlavə edildi!');
+        });
+
+        // Xərc siyahısını yeniləmək
+        function updateExpenseList() {
+            expensesContainer.innerHTML = '';
+            
+            if (expenses.length === 0) {
+                expensesContainer.innerHTML = '<p>Hələlik heç bir xərc əlavə edilməyib.</p>';
+                return;
+            }
+            
+            // Son 10 xərci göstərmək
+            const recentExpenses = expenses.slice(-10).reverse();
+            
+            recentExpenses.forEach(expense => {
+                const expenseItem = document.createElement('div');
+                expenseItem.className = 'expense-item';
+                
+                const categoryNames = {
+                    market: 'Market',
+                    transport: 'Nəqliyyat',
+                    entertainment: 'Əyləncə',
+                    health: 'Sağlamlıq',
+                    education: 'Təhsil',
+                    utilities: 'Kommunal',
+                    clothing: 'Geyim',
+                    other: 'Digər'
+                };
+                
+                expenseItem.innerHTML = `
+                    <div class="expense-details">
+                        <div>${expense.name}</div>
+                        <div class="expense-category">${categoryNames[expense.category]}</div>
+                    </div>
+                    <div class="expense-amount">-${expense.amount} AZN</div>
+                    <div class="expense-date">${expense.date}</div>
+                `;
+                
+                expensesContainer.appendChild(expenseItem);
+            });
+        }
+
+        // Xərc qrafikini yeniləmək
+        function updateExpenseChart() {
+            if (expenseChart) {
+                expenseChart.destroy();
+            }
+            
+            const categories = ['market', 'transport', 'entertainment', 'health', 'education', 'utilities', 'clothing', 'other'];
+            const categoryNames = {
+                market: 'Market',
+                transport: 'Nəqliyyat',
+                entertainment: 'Əyləncə',
+                health: 'Sağlamlıq',
+                education: 'Təhsil',
+                utilities: 'Kommunal',
+                clothing: 'Geyim',
+                other: 'Digər'
+            };
+            
+            const categorySums = {};
+            categories.forEach(category => {
+                categorySums[category] = 0;
+            });
+            
+            expenses.forEach(expense => {
+                categorySums[expense.category] += expense.amount;
+            });
+            
+            const ctx = expenseChartCanvas.getContext('2d');
+            expenseChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: categories.map(cat => categoryNames[cat]),
+                    datasets: [{
+                        label: 'Xərclər (AZN)',
+                        data: categories.map(cat => categorySums[cat]),
+                        backgroundColor: [
+                            '#4361ee',
+                            '#f72585',
+                            '#4cc9f0',
+                            '#2a9d8f',
+                            '#7209b7',
+                            '#f77f00',
+                            '#ff9e00',
+                            '#6a4c93'
+                        ],
+                        borderColor: [
+                            '#3a0ca3',
+                            '#b5179e',
+                            '#3a86ff',
+                            '#1e7d6b',
+                            '#5a0a9c',
+                            '#d46a00',
+                            '#e68600',
+                            '#553c7b'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + ' AZN';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Xərc Kateqoriyalarına Görə Xərclər'
+                        }
+                    }
+                }
+            });
+        }
+
+        // AI tövsiyələrini yenilə
+        function updateAIRecommendations() {
+            const recommendationsContainer = document.getElementById('ai-recommendations-container');
+            
+            if (expenses.length === 0) {
+                recommendationsContainer.innerHTML = `
+                    <div class="recommendation-item">
+                        <h4>Xərc məlumatınız yoxdur</h4>
+                        <p>Xərc əlavə etdikdən sonra burada şəxsi qənaət tövsiyələri görünəcək.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Kateqoriyalara görə xərcləri hesabla
+            const categoryTotals = {};
+            expenses.forEach(expense => {
+                if (!categoryTotals[expense.category]) {
+                    categoryTotals[expense.category] = 0;
+                }
+                categoryTotals[expense.category] += expense.amount;
+            });
+            
+            // Ən çox xərclənən 3 kateqoriya
+            const topCategories = Object.entries(categoryTotals)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 3);
+            
+            let recommendationsHTML = '';
+            
+            topCategories.forEach(([category, amount]) => {
+                const recommendation = generateAIRecommendation(category, amount);
+                recommendationsHTML += `
+                    <div class="recommendation-item">
+                        <h4>${recommendation.title}</h4>
+                        <p>${recommendation.description}</p>
+                        <div class="savings-potential">
+                            <span>Ayda qənaət potensialı:</span>
+                            <span class="potential-amount">${recommendation.savingsPotential} AZN</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // Ümumi tövsiyə
+            const totalMonthlyExpense = Object.values(categoryTotals).reduce((a, b) => a + b, 0);
+            const overallRecommendation = generateOverallRecommendation(totalMonthlyExpense);
+            
+            recommendationsHTML += `
+                <div class="recommendation-item" style="border-left-color: var(--primary);">
+                    <h4>${overallRecommendation.title}</h4>
+                    <p>${overallRecommendation.description}</p>
+                    <div class="savings-potential">
+                        <span>Ümumi qənaət potensialı:</span>
+                        <span class="potential-amount">${overallRecommendation.savingsPotential} AZN</span>
+                    </div>
+                </div>
+            `;
+            
+            recommendationsContainer.innerHTML = recommendationsHTML;
+        }
+
+        // Kateqoriya üzrə AI tövsiyəsi yarat
+        function generateAIRecommendation(category, amount) {
+            const categoryNames = {
+                market: 'Market',
+                transport: 'Nəqliyyat',
+                entertainment: 'Əyləncə',
+                health: 'Sağlamlıq',
+                education: 'Təhsil',
+                utilities: 'Kommunal',
+                clothing: 'Geyim',
+                other: 'Digər'
+            };
+            
+            const categoryTips = {
+                market: {
+                    title: `${categoryNames[category]} xərclərinizi azaldın`,
+                    description: `Aylıq ${amount.toFixed(2)} AZN market xərcləriniz var. Planlaşdırılmış alış-veriş, endirimlərdən istifadə və brend məhsullar əvəzinə daha ucuz alternativlər seçməklə bu xərcləri 20-30% azalda bilərsiniz.`,
+                    savingsPotential: (amount * 0.25).toFixed(2)
+                },
+                transport: {
+                    title: `${categoryNames[category]} xərclərinizi optimallaşdırın`,
+                    description: `Aylıq ${amount.toFixed(2)} AZN nəqliyyat xərcləriniz var. İctimai nəqliyyatdan daha çox istifadə, karpulinq və ya yaxın məsafələrə piyada getməklə bu xərcləri 15-25% azalda bilərsiniz.`,
+                    savingsPotential: (amount * 0.2).toFixed(2)
+                },
+                entertainment: {
+                    title: `${categoryNames[category]} xərclərinizi idarə edin`,
+                    description: `Aylıq ${amount.toFixed(2)} AZN əyləncə xərcləriniz var. Pulsuz və ya ucuz əyləncə alternativləri tapmaq, evdə dostlarınızla vaxt keçirmək və xarici yemək sifarişini azaltmaqla bu xərcləri 30-40% azalda bilərsiniz.`,
+                    savingsPotential: (amount * 0.35).toFixed(2)
+                },
+                health: {
+                    title: `${categoryNames[category]} xərclərinizi planlaşdırın`,
+                    description: `Aylıq ${amount.toFixed(2)} AZN sağlamlıq xərcləriniz var. Profilaktik yoxlamaları vaxtında etmək, sağlam qidalanmaq və düzgün idmanla gələcək böyük xərclərin qarşısını ala bilərsiniz.`,
+                    savingsPotential: (amount * 0.1).toFixed(2)
+                },
+                education: {
+                    title: `${categoryNames[category]} xərclərinizi optimallaşdırın`,
+                    description: `Aylıq ${amount.toFixed(2)} AZN təhsil xərcləriniz var. Pulsuz onlayn resurslardan istifadə, kitabxanalardan faydalanma və təhsil kreditləri götürməzdən əvvəl alternativ yolları araşdırmaqla bu xərcləri 15-20% azalda bilərsiniz.`,
+                    savingsPotential: (amount * 0.15).toFixed(2)
+                },
+                utilities: {
+                    title: `${categoryNames[category]} xərclərinizi azaldın`,
+                    description: `Aylıq ${amount.toFixed(2)} AZN kommunal xərcləriniz var. Enerjiyə qənaət edən cihazlardan istifadə, istifadə etmədiyiniz zaman elektronikanı söndürmək və su istehl.`, savingsPotential: (amount * 0.15).toFixed(2)
+                },
+            }
+        }
+
+        // Ümumi AI tövsiyəsi yarat
+        function generateOverAllRecommendation(totalExpense) {
+            let title, description, savingsPotential;
+            
+            if (totalExpense > 1000) {
+                title = "Xərcləriniz yüksək səviyyədədir";
+                description = `Aylıq ümumi xərcləriniz ${totalExpense.toFixed(2)} AZN təşkil edir. Xərclərinizi ətraflı təhlil edib, prioritetləri müəyyən etməklə və qeyri-zəruri xərcləri kəsməklə ümumi xərclərinizi 20-30% azalda bilərsiniz.`;
+                savingsPotential = (totalExpense * 0.25).toFixed(2);
+            } else if (totalExpense > 500) {
+                title = "Xərcləriniz orta səviyyədədir";
+                description = `Aylıq ümumi xərcləriniz ${totalExpense.toFixed(2)} AZN təşkil edir. Kiçik optimallaşdırmalar və daha effektiv alış-veriş üsulları ilə xərclərinizi 15-20% azalda bilərsiniz.`;
+                savingsPotential = (totalExpense * 0.15).toFixed(2);
+            } else {
+                title = "Xərcləriniz aşağı səviyyədədir";
+                description = `Aylıq ümumi xərcləriniz ${totalExpense.toFixed(2)} AZN təşkil edir. Xərclərinizi idarə etməkdə yaxşı iş görürsünüz. Kiçik tənzimləmələrlə əlavə 5-10% qənaət edə bilərsiniz.`;
+                savingsPotential = (totalExpense * 0.07).toFixed(2);
+            }
+            
+            return {
+                title,
+                description,
+                savingsPotential
+            };
+        }
+
+        // Aylıq xərcləri sıfırlamaq
+        document.getElementById('reset-expenses').addEventListener('click', function() {
+            if (expenses.length === 0) {
+                showNotification('Sıfırlamaq üçün heç bir xərc yoxdur.', true);
+                return;
+            }
+            
+            if (confirm('Bütün xərclərinizi sıfırlamaq istədiyinizə əminsiniz? Bu əməliyyat geri alına bilməz.')) {
+                // Cari ayın xərclərini saxlayıb, digər ayların xərclərini saxlamaq üçün
+                const currentMonth = new Date().getMonth();
+                const currentYear = new Date().getFullYear();
+                
+                // Yalnız cari ayın xərclərini silmək
+                expenses = expenses.filter(expense => {
+                    const expenseDate = new Date(expense.date);
+                    return !(expenseDate.getMonth() === currentMonth && expenseDate.getFullYear() === currentYear);
+                });
+                
+                localStorage.setItem('userExpenses', JSON.stringify(expenses));
+                
+                updateExpenseList();
+                updateExpenseChart();
+                updateAIRecommendations();
+                
+                showNotification('Aylıq xərclər uğurla sıfırlandı!');
+            }
+        });
+
+        // Sistem səviyyələrini yeniləmək
+        function updateSystems() {
+            // Sağlamlıq
+            healthFillEl.style.width = `${simulationData.health}%`;
+            healthValueEl.textContent = `${simulationData.health}%`;
+            
+            // Ailə
+            familyFillEl.style.width = `${simulationData.family}%`;
+            familyValueEl.textContent = `${simulationData.family}%`;
+            
+            // İş
+            workFillEl.style.width = `${simulationData.work}%`;
+            workValueEl.textContent = `${simulationData.work}%`;
+            
+            // Sosial
+            socialFillEl.style.width = `${simulationData.social}%`;
+            socialValueEl.textContent = `${simulationData.social}%`;
+            
+            // Oyunun bitib-bitmədiyini yoxlamaq
+            checkGameOver();
+        }
+
+        // Oyunun bitib-bitmədiyini yoxlamaq
+        function checkGameOver() {
+            let gameOverReason = "";
+            
+            if (simulationData.health <= 0) {
+                gameOverReason = "Sağlamlığınız çox pisləşdi və xəstəxanaya yatmalı oldunuz.";
+                simulationData.isGameOver = true;
+            } else if (simulationData.family <= 0) {
+                gameOverReason = "Ailə münasibətləriniz o qədər pisləşdi ki, həyat yoldaşınız sizi tərk etdi.";
+                simulationData.isGameOver = true;
+            } else if (simulationData.work <= 0) {
+                gameOverReason = "İş performansınız o qədər aşağı düşdü ki, işdən çıxarıldınız.";
+                simulationData.isGameOver = true;
+            } else if (simulationData.social <= 0) {
+                gameOverReason = "Sosial həyatınız o qədər pisləşdi ki, təcrid olundunuz və depressiyaya düşdünüz.";
+                simulationData.isGameOver = true;
+            }
+            
+            if (simulationData.isGameOver) {
+                gameOverMessageEl.textContent = gameOverReason;
+                gameOverEl.style.display = 'block';
+                dailyChallenge.style.display = 'none';
+                decisionResultEl.style.display = 'none';
+                showNotification("Oyun bitdi! Səbəb: " + gameOverReason, true);
+            }
+            
+            return simulationData.isGameOver;
+        }
+
+        // Simulyasiyanı başlatmaq
+        function initSimulation() {
+            console.log("🔄 Simulyasiya başladılır...");
+            
+            simulationData = {
+                monthlyIncome: 1500,
+                currentBalance: 1500,
+                currentDay: 1,
+                totalDays: 30,
+                totalSavings: 0,
+                selectedOption: null,
+                isMonthCompleted: false,
+                isGameOver: false,
+                health: 100,
+                family: 100,
+                work: 100,
+                social: 100,
+                usedQuestions: new Set()
+            };
+            
+            updateSimulationUI();
+            updateSystems();
+            generateDayIndicators();
+            showDailyChallenge();
+            
+            // Gizlənmiş elementləri sıfırlamaq
+            decisionResultEl.style.display = 'none';
+            monthSummaryEl.style.display = 'none';
+            gameOverEl.style.display = 'none';
+            nextDayBtn.style.display = 'none';
+            makeDecisionBtn.style.display = 'inline-flex';
+            dailyChallenge.style.display = 'block';
+            
+            showNotification('Simulyasiya başladı! İlk günün problemi sizi gözləyir.');
+        }
+
+        // Gün göstəricilərini yaratmaq
+        function generateDayIndicators() {
+            dayCounterEl.innerHTML = '';
+            
+            for (let i = 1; i <= simulationData.totalDays; i++) {
+                const dayIndicator = document.createElement('div');
+                dayIndicator.className = 'day-indicator';
+                dayIndicator.textContent = i;
+                
+                if (i === simulationData.currentDay) {
+                    dayIndicator.classList.add('current');
+                } else if (i < simulationData.currentDay) {
+                    dayIndicator.classList.add('completed');
+                }
+                
+                dayCounterEl.appendChild(dayIndicator);
+            }
+        }
+
+        // Gündəlik problemi göstərmək
+        function showDailyChallenge() {
+            console.log("🔄 Gündəlik problem yüklənir...");
+            
+            // İstifadə edilməmiş sualları tapmaq
+            const availableQuestions = dailyChallenges.filter((_, index) => !simulationData.usedQuestions.has(index));
+            
+            if (availableQuestions.length === 0) {
+                // Bütün suallar istifadə edilibsə, təmizləyib yenidən başlayaq
+                simulationData.usedQuestions.clear();
+                showDailyChallenge();
+                return;
+            }
+            
+            // Təsadüfi problem seçmək
+            const randomIndex = Math.floor(Math.random() * availableQuestions.length);
+            const challenge = availableQuestions[randomIndex];
+            const originalIndex = dailyChallenges.indexOf(challenge);
+            
+            // Sualı istifadə edilmişlərə əlavə etmək
+            simulationData.usedQuestions.add(originalIndex);
+            
+            // Problemi göstərmək
+            challengeTitleEl.textContent = challenge.title;
+            challengeDescriptionEl.textContent = challenge.description;
+            
+            // Seçimləri yaratmaq
+            challengeOptionsEl.innerHTML = '';
+            challenge.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'challenge-option';
+                
+                // YALNIZ SEÇİM ADI və XƏRC GÖSTƏRİLİR
+                optionElement.innerHTML = `
+                    <strong>${option.text}</strong>
+                    <div style="margin-top: 0.8rem; font-size: 0.9rem; color: #666;">
+                        <div><i class="fas fa-money-bill-wave"></i> Xərc: ${option.cost} AZN</div>
+                    </div>
+                `;
+                
+                optionElement.addEventListener('click', () => {
+                    // Əvvəlki seçimi təmizləmək
+                    document.querySelectorAll('.challenge-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    // Yeni seçimi qeyd etmək
+                    optionElement.classList.add('selected');
+                    simulationData.selectedOption = option;
+                    
+                    // Qərar vermə düyməsini aktiv etmək
+                    makeDecisionBtn.disabled = false;
+                });
+                
+                challengeOptionsEl.appendChild(optionElement);
+            });
+            
+            // Qərar vermə düyməsini sıfırlamaq
+            makeDecisionBtn.disabled = true;
+            simulationData.selectedOption = null;
+            
+            console.log("✅ Gündəlik problem hazırdır");
+        }
+
+        // Qərar vermək
+        makeDecisionBtn.addEventListener('click', function() {
+            if (!simulationData.selectedOption) return;
+            
+            const selectedOption = simulationData.selectedOption;
+            const currentChallengeIndex = Array.from(simulationData.usedQuestions).pop();
+            const currentChallenge = dailyChallenges[currentChallengeIndex];
+            
+            // Bütün seçimlərin təsirlərini göstərmək
+            resultMessageEl.innerHTML = `
+                <h4>Sizin seçiminiz: <strong style="color: var(--primary);">${selectedOption.text}</strong></h4>
+                <p>${selectedOption.message}</p>
+                
+                <div class="effects-comparison" style="margin-top: 2rem;">
+                    <h5 style="margin-bottom: 1rem; color: var(--primary-dark);">Bütün Seçimlərin Təsirləri:</h5>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+                        ${currentChallenge.options.map((option, index) => `
+                            <div class="effect-card ${option === selectedOption ? 'selected' : ''}" 
+                                 style="padding: 1.2rem; border-radius: 8px; background: ${option === selectedOption ? 'rgba(67, 97, 238, 0.05)' : '#f8f9fa'}; border: 2px solid ${option === selectedOption ? 'var(--primary)' : '#e9ecef'};">
+                                <h6 style="margin-bottom: 1rem; color: ${option === selectedOption ? 'var(--primary)' : 'var(--dark)'}; font-size: 1.1rem;">
+                                    ${option.text} ${option === selectedOption ? '<span style="color: var(--success);">(Sizin Seçiminiz)</span>' : ''}
+                                </h6>
+                                <div class="option-effects">
+                                    ${getEffectHTML(option)}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            // Nəticə panelini göstərmək
+            decisionResultEl.style.display = 'block';
+            
+            // Düymələri dəyişmək
+            makeDecisionBtn.style.display = 'none';
+            nextDayBtn.style.display = 'inline-flex';
+            
+            // Seçimin təsirlərini tətbiq etmək
+            applyDecisionEffects(selectedOption);
+            
+            showNotification('Qərarınız qeydə alındı! Bütün seçimlərin təsirlərini yoxlayın.');
+        });
+
+        // Effekt HTML-ni yaratmaq üçün köməkçi funksiya
+        function getEffectHTML(option) {
+            let html = '';
+            
+            // Maliyyə effekti
+            if (option.cost !== 0) {
+                const costClass = option.cost > 0 ? 'effect-negative' : 'effect-positive';
+                const costText = option.cost > 0 ? `Xərc: ${option.cost} AZN` : `Qazanc: ${-option.cost} AZN`;
+                html += `
+                    <div class="effect-item ${costClass}" style="display: flex; align-items: center; padding: 0.5rem; border-radius: 6px; margin-bottom: 0.5rem;">
+                        <span class="effect-icon" style="margin-right: 8px; width: 20px; text-align: center;">💰</span>
+                        <span>${costText}</span>
+                    </div>
+                `;
+            }
+            
+            // Qənaət effekti
+            if (option.savings > 0) {
+                html += `
+                    <div class="effect-item effect-positive" style="display: flex; align-items: center; padding: 0.5rem; border-radius: 6px; margin-bottom: 0.5rem;">
+                        <span class="effect-icon" style="margin-right: 8px; width: 20px; text-align: center;">💵</span>
+                        <span>Qənaət: ${option.savings} AZN</span>
+                    </div>
+                `;
+            }
+            
+            // Sistem effektləri
+            const effects = [
+                { key: 'health', icon: '❤️', name: 'Sağlamlıq' },
+                { key: 'family', icon: '🏠', name: 'Ailə' },
+                { key: 'work', icon: '💼', name: 'İş' },
+                { key: 'social', icon: '👥', name: 'Sosial' }
+            ];
+            
+            effects.forEach(effect => {
+                const value = option[effect.key];
+                if (value !== 0) {
+                    const effectClass = value > 0 ? 'effect-positive' : 'effect-negative';
+                    const sign = value > 0 ? '+' : '';
+                    html += `
+                        <div class="effect-item ${effectClass}" style="display: flex; align-items: center; padding: 0.5rem; border-radius: 6px; margin-bottom: 0.5rem;">
+                            <span class="effect-icon" style="margin-right: 8px; width: 20px; text-align: center;">${effect.icon}</span>
+                            <span>${effect.name}: ${sign}${value}</span>
+                        </div>
+                    `;
+                }
+            });
+            
+            // Əgər heç bir təsir yoxdursa
+            if (!html) {
+                html = `
+                    <div class="effect-item effect-neutral" style="display: flex; align-items: center; padding: 0.5rem; border-radius: 6px; margin-bottom: 0.5rem;">
+                        <span class="effect-icon" style="margin-right: 8px; width: 20px; text-align: center;">➖</span>
+                        <span>Xüsusi təsiri yoxdur</span>
+                    </div>
+                `;
+            }
+            
+            return html;
+        }
+
+        // Seçimin təsirlərini tətbiq etmək
+        function applyDecisionEffects(option) {
+            // Balansı yeniləmək
+            simulationData.currentBalance -= option.cost;
+            simulationData.totalSavings += option.savings || 0;
+            
+            // Sistemləri yeniləmək
+            simulationData.health += option.health;
+            if (simulationData.health > 100) simulationData.health = 100;
+            if (simulationData.health < 0) simulationData.health = 0;
+            
+            simulationData.family += option.family;
+            if (simulationData.family > 100) simulationData.family = 100;
+            if (simulationData.family < 0) simulationData.family = 0;
+            
+            simulationData.work += option.work;
+            if (simulationData.work > 100) simulationData.work = 100;
+            if (simulationData.work < 0) simulationData.work = 0;
+            
+            simulationData.social += option.social;
+            if (simulationData.social > 100) simulationData.social = 100;
+            if (simulationData.social < 0) simulationData.social = 0;
+            
+            // UI-ni yeniləmək
+            updateSimulationUI();
+            updateSystems();
+        }
+
+        // Növbəti günə keçmək
+        nextDayBtn.addEventListener('click', function() {
+            // Oyunun bitib-bitmədiyini yoxlamaq
+            if (checkGameOver()) return;
+            
+            simulationData.currentDay++;
+            
+            // Ayın sonunu yoxlamaq
+            if (simulationData.currentDay > simulationData.totalDays) {
+                completeMonth();
+                return;
+            }
+            
+            // Gün göstəricilərini yeniləmək
+            generateDayIndicators();
+            
+            // Yeni problem göstərmək
+            showDailyChallenge();
+            
+            // Nəticə panelini gizlətmək
+            decisionResultEl.style.display = 'none';
+            
+            // Düymələri dəyişmək
+            nextDayBtn.style.display = 'none';
+            makeDecisionBtn.style.display = 'inline-flex';
+            
+            // UI-ni yeniləmək
+            updateSimulationUI();
+            
+            showNotification(`Gün ${simulationData.currentDay} üçün yeni problem hazırdır!`);
+        });
+
+        // Ayı tamamlamaq
+        function completeMonth() {
+            simulationData.isMonthCompleted = true;
+            
+            // Ayın xülasəsini hazırlamaq
+            let summaryText = `Ayı ${simulationData.currentBalance} AZN ilə bitirdiniz. `;
+            
+            if (simulationData.currentBalance > simulationData.monthlyIncome) {
+                summaryText += "Təbriklər! Ayı gəlirinizdən çox pul ilə bitirdiniz. Əla qənaət etdiniz!";
+            } else if (simulationData.currentBalance > 0) {
+                summaryText += "Yaxşı iş! Ayı müsbət balansla bitirdiniz.";
+            } else {
+                summaryText += "Ayı mənfi balansla bitirdiniz. Növbəti ayda daha yaxşı qənaət etməyə çalışın.";
+            }
+            
+            summaryText += `<br><br><strong>Ümumi qənaət:</strong> ${simulationData.totalSavings} AZN`;
+            summaryText += `<br><strong>Sağlamlıq:</strong> ${simulationData.health}%`;
+            summaryText += `<br><strong>Ailə münasibətləri:</strong> ${simulationData.family}%`;
+            summaryText += `<br><strong>İş performansı:</strong> ${simulationData.work}%`;
+            summaryText += `<br><strong>Sosial həyat:</strong> ${simulationData.social}%`;
+            
+            monthSummaryTextEl.innerHTML = summaryText;
+            monthSummaryEl.style.display = 'block';
+            
+            showNotification('Ay tamamlandı! Nəticələrinizi yoxlayın.');
+        }
+
+        // Simulyasiyanı yenidən başlatmaq
+        restartSimulationBtn.addEventListener('click', initSimulation);
+        restartGameBtn.addEventListener('click', initSimulation);
+
+        // Simulyasiya UI-ni yeniləmək
+        function updateSimulationUI() {
+            monthlyIncomeEl.textContent = `${simulationData.monthlyIncome} AZN`;
+            currentBalanceEl.textContent = `${simulationData.currentBalance} AZN`;
+            currentDayEl.textContent = `${simulationData.currentDay} / ${simulationData.totalDays}`;
+            totalSavingsEl.textContent = `${simulationData.totalSavings} AZN`;
+        }
+
+        // Bütün validasiyaları başlat
+        function initializeAllValidations() {
+            console.log("🔄 Validasiyalar başladılır...");
+            
+            // 21 rəqəm məhdudiyyəti
+            const amountInputs = [
+                document.getElementById('goal-amount'),
+                document.getElementById('daily-saving'),
+                document.getElementById('expense-amount')
+            ];
+            
+            amountInputs.forEach((input, index) => {
+                if (input) {
+                    input.addEventListener('input', function() {
+                        const value = this.value;
+                        if (value.length > 21) {
+                            this.value = value.slice(0, 21);
+                            showNotification('Məbləğ 21 rəqəmdən çox ola bilməz.', true);
+                        }
+                    });
+                    console.log(`✅ Input ${index + 1} validasiyası təyin edildi`);
+                }
+            });
+            
+            // 21 simvol məhdudiyyəti
+            const textInputs = document.querySelectorAll('input[type="text"]');
+            textInputs.forEach(input => {
+                input.setAttribute('maxlength', '21');
+            });
+            console.log(`✅ ${textInputs.length} mətn inputu təyin edildi`);
+        }
+
+        // Səhifə yükləndikdə bütün sistemləri başlat
+        window.addEventListener('DOMContentLoaded', function() {
+            console.log("🚀 Səhifə yükləndi, sistemlər başladılır...");
+            
+            // Əsas sistemləri başlat
+            initializeThemeSystem();
+            initializeNavigation();
+            initializeEducationAccordion();
+            initializeAllValidations();
+            
+            // Digər funksiyalar
+            loadData();
+            initSimulation();
+            updateAIRecommendations();
+            
+            // Tarix inputunu təyin et
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            if (goalDateInput) {
+                goalDateInput.min = formattedDate;
+                console.log("📅 Tarix inputu təyin edildi");
+            }
+            
+            console.log("✅ Bütün sistemlər hazırdır");
+        });
+
+        // Elementlərin tapılıb-tapılmadığını yoxlamaq
+        const checkElements = () => {
+            const elements = {
+                'setGoalBtn': document.getElementById('set-goal'),
+                'goalNameInput': document.getElementById('goal-name'),
+                'navLinks': document.querySelectorAll('.nav-link'),
+                'sections': document.querySelectorAll('.section'),
+                'educationOptions': document.querySelectorAll('.education-option')
+            };
+            
+            for (const [name, element] of Object.entries(elements)) {
+                if (element && (Array.isArray(element) ? element.length > 0 : true)) {
+                    console.log(`✓ ${name} tapıldı`);
+                } else {
+                    console.log(`✗ ${name} TAPILMADI`);
+                }
+            }
+        };
+
+        // Səhifə tam yükləndikdə elementləri yoxla
+        window.addEventListener('load', function() {
+            console.log("📊 Element yoxlaması:");
+            checkElements();
+        });
+
+    </script>
+</body>
+</html>
